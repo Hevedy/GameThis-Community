@@ -1,7 +1,7 @@
 {
-"Name":			"My Game Name",
-"Description":	"My own game about bananas",
+"Name":			"RPG Example",
+"Description":	"Twitch Game",
 "Creator":		"Hevedy",
-"Version":		"1.0.0",
-"LastUpdate":	"18/08/18"
+"Version":		"1.0.1",
+"LastUpdate":	"18/08/23"
 }
