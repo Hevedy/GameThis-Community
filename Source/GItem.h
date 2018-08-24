@@ -1,27 +1,27 @@
 /*
 ===========================================================================
 
-Game This - Community Edition by Hevedy 
+Game This - Community Edition by Hevedy
 <https://github.com/Hevedy/GameThis-Community>
 
 Game This - Community Edition GPL Source Code
 Copyright (C) 2018 Hevedy <https://github.com/Hevedy>.
 
-This file is part of the Game This - Community Edition GPL Source Code. 
- 
- 
-Game This - Community Edition GPL Source Code is free software: 
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published bythe Free Software Foundation, 
+This file is part of the Game This - Community Edition GPL Source Code.
+
+
+Game This - Community Edition GPL Source Code is free software:
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published bythe Free Software Foundation,
 either version 3 of the License, or (at your option) any later version.
 
-Game This - Community Edition GPL Source Code is distributed in the hope 
-that it will be useful, but WITHOUT ANY WARRANTY; without even the 
-implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+Game This - Community Edition GPL Source Code is distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Game This - Community Edition GPL Source Code.  
+along with Game This - Community Edition GPL Source Code.
 If not, see <http://www.gnu.org/licenses/>.
 
 
@@ -37,15 +37,15 @@ SOFTWARE.
 */
 
 
-#ifndef GOBJECT_H
-#define GOBJECT_H
+#ifndef GITEM_H
+#define GITEM_H
 
 #include <QObject>
 #include "GameFunctions.h"
 
-#define ObjectSTR Objects
+#define ItemSTR Items
 
-enum class EObjectTypeList {
+enum class EItemTypeList {
 	ENone,
 	EWeapon,
 	ETool,
@@ -54,7 +54,8 @@ enum class EObjectTypeList {
 	EOther
 };
 
-enum class EObjectSlotList {
+/*
+enum class EItemSlotList {
 	EDefault,
 	EInventory,
 	EHands,
@@ -68,8 +69,9 @@ enum class EObjectSlotList {
 	EFoots,
 	EWorld
 };
+*/
 
-enum class EObjectUsesList {
+enum class EItemUsesList {
 	EInfinite,
 	EOne,
 	ENumber,
@@ -78,9 +80,31 @@ enum class EObjectUsesList {
 	EOther
 };
 
-struct FObjectStruct {
+struct FItemSlotStruct {
 public:
 
+
+	// Name
+	QString NameID;
+	// Name
+	QString Name;
+	// Description
+	QString Desc;
+	// Is a character slot ?
+	bool IsCharacterSlot;
+
+	FItemSlotStruct( QString nameID = "", QString name = "", QString desc = "", bool isCharacterSlot = true )
+	: NameID( nameID )
+	, Name( name )
+	, Desc( desc )
+	, IsCharacterSlot( isCharacterSlot ) {}
+};
+
+struct FItemStruct {
+public:
+
+	// Name
+	QString NameID;
 	// Name
 	QString Name;
 	// Description
@@ -90,16 +114,16 @@ public:
 	// Can be placed in the world
 	bool bPlaceable;
 	// Type
-	EObjectTypeList Type;
+	EItemTypeList Type;
 	// Space on the inventory
 	int Weight;
 	// Slots where can be placed
-	QList<EObjectSlotList> ValidSlots;
+	QList<FItemSlotStruct> ValidSlots;
 	// Status of the object
 	int Status;
 	
-	FObjectStruct( QString name = "", QString desc = "", QString command = "", bool bplaceable = false, EObjectTypeList type = {},
-				   int weight = 0, QList<EObjectSlotList> validSlots = {}, int status = 0 )
+	FItemStruct( QString name = "", QString desc = "", QString command = "", bool bplaceable = false, EItemTypeList type = {},
+				   int weight = 0, QList<FItemSlotStruct> validSlots = {}, int status = 0 )
 	: Name( name )
 	, Desc( desc )
 	, Command( command )
@@ -111,12 +135,12 @@ public:
 };
 
 
-class GObject : public QObject
+class GItem : public QObject
 {
     Q_OBJECT
 	
 public:
-    explicit GObject(QObject *parent = nullptr);
+	explicit GItem(QObject *parent = nullptr);
 
 	void Init();
 	
@@ -148,4 +172,4 @@ signals:
 public slots:
 };
 
-#endif // GOBJECT_H
+#endif // GITEM_H

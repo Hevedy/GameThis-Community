@@ -107,7 +107,7 @@
 			"InputType": 		[ ],
 			"IsPositive":		"~",
 			"AffectPlayers":	[ ],
-			"AffectItems":		[ ".()self" ],
+			"AffectItems":		[ ".selfItem()" ],
 			"AffectStats":		[ ],
 			"AffectAttributes":	[ ],
 			"AffectSkills":		[ ]
@@ -118,7 +118,7 @@
 		{
 		"Name":			"Knife",
 		"Description":	"",
-		"Uses":			"",
+		"Uses":			"0",
 		"IsReady":		"true",
 		"Load":			"0",
 		"ItemLoad":		"",

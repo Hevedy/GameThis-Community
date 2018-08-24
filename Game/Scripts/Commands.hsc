@@ -48,7 +48,25 @@
 			"InputNeeded":		"false",
 			"InputDefault":		"",
 			"GroupsLocked":		[ "" ],
-			"Text":				[ "()RandomNum" ]
+			"Text":				[ ".RandomNum()" ]
+		},
+		{
+			"Name":				"Join",
+			"Description":		"",
+			"Command":			[ "Join" ],
+			"InputNeeded":		"false",
+			"InputDefault":		"",
+			"GroupsLocked":		[ "" ],
+			"Text":				[ ".JoinGame()" ]
+		},
+		{
+			"Name":				"Leave",
+			"Description":		"",
+			"Command":			[ "Leave" ],
+			"InputNeeded":		"false",
+			"InputDefault":		"",
+			"GroupsLocked":		[ "" ],
+			"Text":				[ ".LeaveGame()" ]
 		},
 		{
 			"Name":				"GetCharacter",
@@ -57,7 +75,7 @@
 			"InputNeeded":		"false",
 			"InputDefault":		"",
 			"GroupsLocked":		[ "" ],
-			"Text":				[ "()GetNewPlayerCharacter" ]
+			"Text":				[ ".GetNewPlayerCharacter()" ]
 		},
 		{
 			"Name":				"GetCharacter",
@@ -66,7 +84,7 @@
 			"InputNeeded":		"false",
 			"InputDefault":		"",
 			"GroupsLocked":		[ "" ],
-			"Text":				[ "()GetPlayerCharacter" ]
+			"Text":				[ ".GetPlayerCharacter()" ]
 		}
 	]
 }

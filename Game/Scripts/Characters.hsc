@@ -1,5 +1,5 @@
 {
-"SkillResult":
+"SkillResults":
 	[
 		{
 			"Name":			"Fail",
