@@ -6,7 +6,8 @@
 			"Command":			[ "Dice", "Roll" ],
 			"InputNeeded":		"true",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ]
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
 			"DiceGroupCall":	[ "Default" ]
 		}
 	],
@@ -17,8 +18,9 @@
 			"Command":			[ "Attack" ],
 			"InputNeeded":		"true",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
-			"SkillCall":		[ "" ]
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
+			"SkillCall":		[  ]
 		}
 	],
 "Commands":
@@ -29,8 +31,9 @@
 			"Command":			[ "Ping" ],
 			"InputNeeded":		"false",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
-			"Text":				[ "" ]
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
+			"Text":				[  ]
 		},
 		{
 			"Name":				"RandomBool",
@@ -38,7 +41,8 @@
 			"Command":			[ "GetRandomBool", "RandBool" ],
 			"InputNeeded":		"false",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
 			"Text":				[ "True", "False" ]
 		},
 		{
@@ -47,7 +51,8 @@
 			"Command":			[ "GetRandomNum", "RandNum" ],
 			"InputNeeded":		"false",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
 			"Text":				[ ".RandomNum()" ]
 		},
 		{
@@ -56,7 +61,8 @@
 			"Command":			[ "Join" ],
 			"InputNeeded":		"false",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
 			"Text":				[ ".JoinGame()" ]
 		},
 		{
@@ -65,7 +71,8 @@
 			"Command":			[ "Leave" ],
 			"InputNeeded":		"false",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
 			"Text":				[ ".LeaveGame()" ]
 		},
 		{
@@ -74,7 +81,8 @@
 			"Command":			[ "GetCharacter", "NewCharacter" ],
 			"InputNeeded":		"false",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
 			"Text":				[ ".GetNewPlayerCharacter()" ]
 		},
 		{
@@ -83,8 +91,33 @@
 			"Command":			[ "Character" ],
 			"InputNeeded":		"false",
 			"InputDefault":		"",
-			"GroupsLocked":		[ "" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
 			"Text":				[ ".GetPlayerCharacter()" ]
 		}
+	],
+"AutoCommands":
+	[
+		{
+			"Name":				"Web",
+			"Command":			[ "Web" ],
+			"Text":				[ "Visit our website http://www.hevedy.com/" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ]
+		},
+		{
+			"Name":				"Store",
+			"Command":			[ "Store" ],
+			"Text":				[ "Check our products https://hevedy.itch.io/" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ]
+		},
+		{
+			"Name":				"Twitter",
+			"Command":			[ "Twitter" ],
+			"Text":				[ "Follow us on Twitter https://twitter.com/Hevedy" ],
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ]
+		},
 	]
 }

@@ -39,8 +39,9 @@
 			"Level":		"Inp1",
 			"LevelDefault":	"0",
 			"LevelMax":		"10"
+			"NeedDice":		"true",
+			"AutoDice":		"false",
 			"NeedItem":		"true",
-			"ValidItem":	[ "" ]
 			"Text":			[ "@User Attack the player @Target and " ]
 			"OnUse":		
 			[
