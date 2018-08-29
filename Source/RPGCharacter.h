@@ -41,14 +41,16 @@ SOFTWARE.
 #define GCHARACTER_H
 
 #include <QObject>
-#include "GameFunctions.h"
-#include "GItem.h"
+#include "GlobalFunctions.h"
+#include "RPGItem.h"
 
 #define CharacterSTR PlayerCharacters
 #define CharacterWorldSTR WorldCharacters
 #define CharacterDifSTR DifficultyLevels
 
-struct FSkillResultStruct {
+// TODO FIX
+
+struct FRPGSkillResultStruct {
 public:
 
 	// Name
@@ -61,7 +63,7 @@ public:
 	bool IsPositive;
 	QString Text;
 
-	FSkillResultStruct( QString nameID = "", QString name = "", QString desc = "",
+	FRPGSkillResultStruct( QString nameID = "", QString name = "", QString desc = "",
 						bool isPositive = false, QString text = "" )
 	: NameID( nameID )
 	, Name( name )
@@ -72,7 +74,7 @@ public:
 
 // Skill the action
 // Skill means the hability the character have to do something, can level up and change the number
-struct FSkillStruct {
+struct FRPGSkillStruct {
 public:
 
 	// Name
@@ -87,7 +89,7 @@ public:
 	int Amount;
 	int AmountMax;
 
-	FSkillStruct( QString nameID = "", QString name = "", QString desc = "", quint32 level = 0 )
+	FRPGSkillStruct( QString nameID = "", QString name = "", QString desc = "", quint32 level = 0 )
 	: Name( name )
 	, Desc( desc )
 	, Level( level ) {}
@@ -96,7 +98,7 @@ public:
 // Attribute the points for actions
 // Character attibutes means the points it have to do something, defined by the class character
 // Usually don't level up and just affect the performance at do actions
-struct FAttributeStruct {
+struct FRPGAttributeStruct {
 public:
 
 	// Name
@@ -107,15 +109,15 @@ public:
 	QString Desc;
 	// Level
 	QList<QString> Inputs;
-	QList<EGameInputTypeList> InputTypes;
+	QList<EVariableTypeList> InputTypes;
 	int Amount;
 	int AmountDefault;
 	int AmountMax;
 	// Have limit and should use the number ?
 	bool AmountMaxLimit;
 
-	FAttributeStruct( QString nameID = "", QString name = "", QString desc = "",
-					  QList<QString> inputs = {}, QList<EGameInputTypeList> inputTypes = {},
+	FRPGAttributeStruct( QString nameID = "", QString name = "", QString desc = "",
+					  QList<QString> inputs = {}, QList<EVariableTypeList> inputTypes = {},
 					  int amount = 0, int amountDefault = 0, int amountMax = 0, bool amountMaxLimit = true )
 	: NameID( nameID )
 	, Name( name )
@@ -130,7 +132,7 @@ public:
 
 // Stats to keep info about character
 // Counter for some stat, health, money, etc
-struct FStatStruct {
+struct FRPGStatStruct {
 public:
 
 	// Name
@@ -141,7 +143,7 @@ public:
 	QString Desc;
 	// Level
 	QList<QString> Inputs;
-	QList<EGameInputTypeList> InputTypes;
+	QList<EVariableTypeList> InputTypes;
 	int Amount;
 	int AmountDefault;
 	int AmountMin;
@@ -149,8 +151,8 @@ public:
 	int AmountMax;
 	bool AmountMaxLimit;
 
-	FStatStruct( QString nameID = "", QString name = "", QString desc = "",
-				QList<QString> inputs = {}, QList<EGameInputTypeList> inputTypes = {},
+	FRPGStatStruct( QString nameID = "", QString name = "", QString desc = "",
+				QList<QString> inputs = {}, QList<EVariableTypeList> inputTypes = {},
 				int amount = 0, int amountDefault = 0, int amountMin = 0, bool amountMinLimit = true,
 				int amountMax = 0, bool amountMaxLimit = true )
 	: NameID( nameID )
@@ -166,7 +168,7 @@ public:
 	, AmountMaxLimit( amountMaxLimit ) {}
 };
 
-struct FTraitStruct {
+struct FRPGTraitStruct {
 public:
 
 	// Name
@@ -179,7 +181,7 @@ public:
 	bool IsPositive;
 	QString Text;
 
-	FTraitStruct( QString nameID = "", QString name = "", QString desc = "", bool isPositive = false )
+	FRPGTraitStruct( QString nameID = "", QString name = "", QString desc = "", bool isPositive = false )
 	: NameID( nameID )
 	, Name( name )
 	, Desc( desc )
@@ -187,7 +189,7 @@ public:
 };
 
 // Character Class, where defines a class with stats and skills and default intentory, characters may change
-struct FClassStruct {
+struct FRPGClassStruct {
 public:
 
 	// Name
@@ -223,7 +225,7 @@ public:
 	// Slots on character
 	QList<FItemSlotStruct> Slots;
 
-	FClassStruct( QString name = "", QString desc = "",
+	FRPGClassStruct( QString name = "", QString desc = "",
 	QList<QString> positive = {}, QList<QString> negative = {}, QList<QString> attacks = {}, QList<QString> attacksDesc = {},
 	QList<QString> skills = {}, QList<QString> skillsDesc = {}, QList<QString> specialActions = {},
 	int healthPoints = 0, int actionPoints = 0 )
@@ -241,7 +243,7 @@ public:
 };
 
 // Difficualty calculated for enemies
-struct FRankStruct {
+struct FRPGRankStruct {
 public:
 
 	// Name
@@ -257,7 +259,7 @@ public:
 	// Level
 	quint32 Skill;
 
-	FRankStruct( QString nameID = "", QString name = "", QString desc = "", quint32 level = 0 )
+	FRPGRankStruct( QString nameID = "", QString name = "", QString desc = "", quint32 level = 0 )
 	: NameID( nameID )
 	, Name( name )
 	, Desc( desc )
@@ -265,7 +267,7 @@ public:
 };
 
 // Actual character struct
-struct FCharacterStruct {
+struct FRPGCharacterStruct {
 public:
 
 	// Name
@@ -301,7 +303,7 @@ public:
 	// Slots on character
 	QList<FItemSlotStruct> Slots;
 
-	FCharacterStruct( QString name = "", QString desc = "",
+	FRPGCharacterStruct( QString name = "", QString desc = "",
 	QList<QString> positive = {}, QList<QString> negative = {}, QList<QString> attacks = {}, QList<QString> attacksDesc = {},
 	QList<QString> skills = {}, QList<QString> skillsDesc = {}, QList<QString> specialActions = {},
 	int healthPoints = 0, int actionPoints = 0 )
@@ -319,65 +321,30 @@ public:
 };
 
 
-class GCharacter : public QObject
+class RPGCharacter : public QObject
 {
     Q_OBJECT
 public:
-    explicit GCharacter(QObject *parent = nullptr);
+    explicit RPGCharacter(QObject *parent = nullptr);
 
-    void Init();
+    void init();
 
-	// Name ID
-	QString NameID;
-	// Name
-	QString Name;
-	// Description
-	QString Desc;
-	// Positive Actions
-	QList<QString> Positive;
-	// Negative Actions
-	QList<QString> Negative;
-	// Attacks
-	QList<QString> Attacks;
-	// Attacks Description
-	QList<QString> AttacksDesc;
-	// Skills
-	QList<QString> Skills;
-	// Skills Description
-	QList<QString> SkillsDesc;
-	// Special Actions
-	QList<QString> SpecialActions;
-	// Health Points
-	int HealthPoints;
-	// Action Points
-	int ActionPoints;
-	// Stamina Points
-	int StaminaPoints;
-	// Food Points
-	int FoodPoints;
-	// Water Points
-	int WaterPoints;
-	// Space on Inventory
-	int InventorySpace;
-	// Slots on character
-	QList<FItemSlotStruct> Slots;
+    static void ReadCharacterSkillResults( QList<FRPGSkillResultStruct>& _Characters, bool& _Result );
 
-	static void ReadCharacterSkillResults( QList<FSkillResultStruct>& Characters, bool& bResult );
+    static void ReadCharacterSkills( QList<FRPGSkillStruct>& _Characters, bool& _Result );
 
-	static void ReadCharacterSkills( QList<FSkillStruct>& Characters, bool& bResult );
+    static void ReadCharacterAttributes( QList<FRPGAttributeStruct>& _Characters, bool& _Result );
 
-	static void ReadCharacterAttributes( QList<FAttributeStruct>& Characters, bool& bResult );
-
-	static void ReadCharacterStats( QList<FStatStruct>& Characters, bool& bResult );
+    static void ReadCharacterStats( QList<FRPGStatStruct>& _Characters, bool& _Result );
 
 
-	static void ReadCharacterTraits( QList<FTraitStruct>& Characters, bool& bResult );
+	static void ReadCharacterTraits( QList<FRPGTraitStruct>& _Characters, bool& _Result );
 
-	static void ReadCharacterClass( QList<FClassStruct>& Characters, bool& bResult );
+	static void ReadCharacterClass( QList<FRPGClassStruct>& _Characters, bool& _Result );
 
-	static void ReadCharacterRanks( QList<FRankStruct>& Characters, bool& bResult );
+	static void ReadCharacterRanks( QList<FRPGRankStruct>& _Characters, bool& _Result );
 
-	static void ReadCharacters( QList<FCharacterStruct>& Characters, bool& bResult );
+	static void ReadCharacters( QList<FRPGCharacterStruct>& _Characters, bool& _Result );
 
 private:
 

@@ -37,17 +37,14 @@ SOFTWARE.
 */
 
 
-#include "GPlayer.h"
+#include "RPGItem.h"
 
-GPlayer::GPlayer(QObject *parent) : QObject(parent)
+RPGItem::RPGItem(QObject* _Parent) : QObject(_Parent)
 {
 
 }
 
-void GPlayer::Init() {
-
-}
-
-bool GPlayer::LoadPlayerProfile() {
-	return true;
+void RPGItem::Init() {
+	
+	
 }

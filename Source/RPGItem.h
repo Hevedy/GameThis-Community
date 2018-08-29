@@ -37,21 +37,21 @@ SOFTWARE.
 */
 
 
-#ifndef GITEM_H
-#define GITEM_H
+#ifndef RPGITEM_H
+#define RPGITEM_H
 
 #include <QObject>
-#include "GameFunctions.h"
+#include "GlobalFunctions.h"
 
 #define ItemSTR Items
 
 enum class EItemTypeList {
-	ENone,
-	EWeapon,
-	ETool,
-	ESpell,
-	EConsumable,
-	EOther
+	eNone,
+	eWeapon,
+	eTool,
+	eSpell,
+	eConsumable,
+	eOther
 };
 
 /*
@@ -72,12 +72,12 @@ enum class EItemSlotList {
 */
 
 enum class EItemUsesList {
-	EInfinite,
-	EOne,
-	ENumber,
-	ESpell,
-	EConsumable,
-	EOther
+	eInfinite,
+	eOne,
+	eNumber,
+	eSpell,
+	eConsumable,
+	eOther
 };
 
 struct FItemSlotStruct {
@@ -85,64 +85,64 @@ public:
 
 
 	// Name
-	QString NameID;
+	QString nameID;
 	// Name
-	QString Name;
+	QString name;
 	// Description
-	QString Desc;
+	QString desc;
 	// Is a character slot ?
-	bool IsCharacterSlot;
+	bool isCharacterSlot;
 
-	FItemSlotStruct( QString nameID = "", QString name = "", QString desc = "", bool isCharacterSlot = true )
-	: NameID( nameID )
-	, Name( name )
-	, Desc( desc )
-	, IsCharacterSlot( isCharacterSlot ) {}
+	FItemSlotStruct( QString _NameID = "", QString _Name = "", QString _Desc = "", bool _IsCharacterSlot = true )
+	: nameID( _NameID )
+	, name( _Name )
+	, desc( _Desc )
+	, isCharacterSlot( _IsCharacterSlot ) {}
 };
 
 struct FItemStruct {
 public:
 
 	// Name
-	QString NameID;
+	QString nameID;
 	// Name
-	QString Name;
+	QString name;
 	// Description
-	QString Desc;
+	QString desc;
 	// Name
-	QString Command;
+	QString command;
 	// Can be placed in the world
-	bool bPlaceable;
+	bool placeable;
 	// Type
-	EItemTypeList Type;
+	EItemTypeList type;
 	// Space on the inventory
-	int Weight;
+	int weight;
 	// Slots where can be placed
-	QList<FItemSlotStruct> ValidSlots;
+	QList<FItemSlotStruct> validSlots;
 	// Status of the object
-	int Status;
+	int status;
 	
-	FItemStruct( QString name = "", QString desc = "", QString command = "", bool bplaceable = false, EItemTypeList type = {},
-				   int weight = 0, QList<FItemSlotStruct> validSlots = {}, int status = 0 )
-	: Name( name )
-	, Desc( desc )
-	, Command( command )
-	, bPlaceable( bplaceable )
-	, Type( type )
-	, Weight( weight )
-	, ValidSlots( validSlots )
-	, Status( status ) {}
+	FItemStruct( QString _Name = "", QString _Desc = "", QString _Command = "", bool _Placeable = false, EItemTypeList _Type = {},
+				   int _Weight = 0, QList<FItemSlotStruct> _ValidSlots = {}, int _Status = 0 )
+	: name( _Name )
+	, desc( _Desc )
+	, command( _Command )
+	, placeable( _Placeable )
+	, type( _Type )
+	, weight( _Weight )
+	, validSlots( _ValidSlots )
+	, status( _Status ) {}
 };
 
 
-class GItem : public QObject
+class RPGItem : public QObject
 {
     Q_OBJECT
 	
 public:
-	explicit GItem(QObject *parent = nullptr);
+	explicit RPGItem(QObject *parent = nullptr);
 
-	void Init();
+	void init();
 	
 	// Dice Generate Name Reference
 	QString NameID;
@@ -160,7 +160,7 @@ public:
 	quint8 SidesNum; // Min 0, Max 128
 
 	// Count from 0 rather than 1
-	bool bStartZero;
+	bool StartZero;
 
 	// Last result used
 	quint8 LastResult;
@@ -172,4 +172,4 @@ signals:
 public slots:
 };
 
-#endif // GITEM_H
+#endif // RPGITEM_H

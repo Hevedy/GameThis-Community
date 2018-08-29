@@ -37,14 +37,13 @@ SOFTWARE.
 */
 
 
-#include "GDice.h"
+#include "RPGPlayer.h"
 
-GDice::GDice(QObject *parent) : QObject(parent)
+RPGPlayer::RPGPlayer(QObject* _Parent) : QObject(_Parent)
 {
 
 }
 
-void GDice::Init() {
-	
-	
+void RPGPlayer::init() {
+
 }

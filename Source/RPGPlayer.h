@@ -37,59 +37,57 @@ SOFTWARE.
 */
 
 
-#ifndef GPLAYER_H
-#define GPLAYER_H
+#ifndef RPGPLAYER_H
+#define RPGPLAYER_H
 
 #include <QObject>
-#include "GameFunctions.h"
-#include "GCharacter.h"
-#include "GDice.h"
-#include "GCommand.h"
-#include "GItem.h"
+#include "GlobalFunctions.h"
+#include "RPGCharacter.h"
+#include "RPGDice.h"
+#include "Commands.h"
+#include "RPGItem.h"
 
 
 enum class EPlayerTypeList {
-	EAdmin,
-	EMod,
-	EPlayer
+	eAdmin,
+	eMod,
+	ePlayer
 };
 
 enum class EPlayerStatusList {
-	EPlaying,
-	EWaiting,
-	ETurn
+	ePlaying,
+	eWaiting,
+	eTurn
 };
 
-class GPlayer : public QObject
+class RPGPlayer : public QObject
 {
     Q_OBJECT
 public:
-    explicit GPlayer(QObject *parent = nullptr);
+    explicit RPGPlayer(QObject *parent = nullptr);
 
-    void Init();
-
-    bool LoadPlayerProfile();
+    void init();
 
     // Player Character
-    GCharacter* Character;
+    RPGCharacter* Character;
 
     /// Player Dice
     GDice* Dice;
 
     // Player Action
-    GCommand* Action;
+    Commands* Action;
 
     // Action Used
-    bool bActionUsed;
+    bool ActionUsed;
 
     // Dice Used
-    bool bDiceUsed;
+    bool DiceUsed;
 
     // Is playing
-    bool bPlaying;
+    bool Playing;
 
     // Current turn ?
-    bool bOnTurn;
+    bool OnTurn;
 
     // Social Public Management
 
@@ -115,5 +113,5 @@ public slots:
 
 };
 
-#endif // GPLAYER_H
+#endif // RPGPLAYER_H
 

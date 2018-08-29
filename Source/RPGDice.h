@@ -37,14 +37,75 @@ SOFTWARE.
 */
 
 
-#include "GItem.h"
+#ifndef GDICE_H
+#define GDICE_H
 
-GItem::GItem(QObject *parent) : QObject(parent)
+#include <QObject>
+#include "GlobalFunctions.h"
+
+#define DiceSTR Dices
+
+struct FDiceStruct {
+public:
+
+	// Name
+	QString name;
+	// Description
+	QString desc;
+	// Name
+	QString command;
+	// Total Number of Sides (Min 0, Max 128)
+	quint8 sidesNum;
+	// Count from 0 rather than 1
+	bool startZero;
+	
+	FDiceStruct( QString _Name = "", QString _Desc = "", QString _Command = "", quint8 _SidesNum = 1, bool _StartZero = false )
+	: name( _Name )
+	, desc( _Desc )
+	, command( _Command )
+	, sidesNum( _SidesNum )
+	, startZero( _StartZero ) {}
+};
+
+
+class GDice : public QObject
 {
-
-}
-
-void GItem::Init() {
+    Q_OBJECT
 	
+public:
+    explicit GDice(QObject *parent = nullptr);
+
+	void init();
 	
-}
+	// Dice Generate Name Reference
+	QString NameID;
+
+	// Dice Name
+	QString Name;
+
+	// Dice Description
+	QString Desc;
+
+	// Dice Name
+	QString Command;
+
+	// Total Number of Sides
+	quint8 SidesNum; // Min 0, Max 128
+
+	// Count from 0 rather than 1
+	bool StartZero;
+
+	// Current result
+	quint8 DiceNumber;
+
+    // Last result used
+    quint8 LastDiceNumber;
+
+private:
+	
+signals:
+
+public slots:
+};
+
+#endif // GDICE_H

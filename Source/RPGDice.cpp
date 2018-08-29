@@ -37,75 +37,14 @@ SOFTWARE.
 */
 
 
-#ifndef GDICE_H
-#define GDICE_H
+#include "RPGDice.h"
 
-#include <QObject>
-#include "GameFunctions.h"
-
-#define DiceSTR Dices
-
-struct FDiceStruct {
-public:
-
-	// Name
-	QString Name;
-	// Description
-	QString Desc;
-	// Name
-	QString Command;
-	// Total Number of Sides (Min 0, Max 128)
-	quint8 SidesNum;
-	// Count from 0 rather than 1
-	bool bStartZero;
-	
-	FDiceStruct( QString name = "", QString desc = "", QString command = "", quint8 sidesNum = 1, bool bstartZero = false )
-	: Name( name )
-	, Desc( desc )
-	, Command( command )
-	, SidesNum( sidesNum )
-	, bStartZero( bstartZero ) {}
-};
-
-
-class GDice : public QObject
+RPGDice::RPGDice(QObject* _Parent) : QObject(_Parent)
 {
-    Q_OBJECT
+
+}
+
+void RPGDice::Init() {
 	
-public:
-    explicit GDice(QObject *parent = nullptr);
-
-	void Init();
 	
-	// Dice Generate Name Reference
-	QString NameID;
-
-	// Dice Name
-	QString Name;
-
-	// Dice Description
-	QString Desc;
-
-	// Dice Name
-	QString Command;
-
-	// Total Number of Sides
-	quint8 SidesNum; // Min 0, Max 128
-
-	// Count from 0 rather than 1
-	bool bStartZero;
-
-	// Current result
-	quint8 DiceNumber;
-
-    // Last result used
-    quint8 LastDiceNumber;
-
-private:
-	
-signals:
-
-public slots:
-};
-
-#endif // GDICE_H
+}

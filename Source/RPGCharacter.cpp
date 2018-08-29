@@ -37,48 +37,48 @@ SOFTWARE.
 */
 
 
-#include "GCharacter.h"
+#include "RPGCharacter.h"
 
-GCharacter::GCharacter(QObject *parent) : QObject(parent)
+RPGCharacter::RPGCharacter(QObject* _Parent) : QObject(_Parent)
 {
 
 }
 
 
-void GCharacter::Init() {
+void RPGCharacter::Init() {
 
 }
 
 
-void ReadCharacterSkillResults( QList<FSkillResultStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacterSkillResults( QList<FRPGSkillResultStruct>& Characters, bool& _Result ) {
 
 }
 
-void ReadCharacterSkills( QList<FSkillStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacterSkills( QList<FRPGSkillStruct>& _Characters, bool& _Result ) {
 
 }
 
-void ReadCharacterAttributes( QList<FAttributeStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacterAttributes( QList<FRPGAttributeStruct>& _Characters, bool& _Result ) {
 
 }
 
-void ReadCharacterStats( QList<FStatStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacterStats( QList<FRPGStatStruct>& _Characters, bool& _Result ) {
 
 }
 
 
-void ReadCharacterTraits( QList<FTraitStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacterTraits( QList<FRPGTraitStruct>& _Characters, bool& _Result ) {
 
 }
 
-void ReadCharacterClass( QList<FClassStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacterClass( QList<FRPGClassStruct>& _Characters, bool& _Result ) {
 
 }
 
-void ReadCharacterRanks( QList<FRankStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacterRanks( QList<FRPGRankStruct>& _Characters, bool& _Result ) {
 
 }
 
-void ReadCharacters( QList<FCharacterStruct>& Characters, bool& bResult ) {
+void RPGCharacter::ReadCharacters( QList<FRPGCharacterStruct>& _Characters, bool& _Result ) {
 
 }
