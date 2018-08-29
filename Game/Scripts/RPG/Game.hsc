@@ -1,8 +1,6 @@
 {
 "Game":
 	{
-		"PianoEnabled":			"true",
-		"PianoAudioEnabled":	"true",
 		"RPGGame": 
 			{
 				"Name":			"RPG Example",

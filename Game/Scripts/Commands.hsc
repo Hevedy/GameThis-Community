@@ -3,80 +3,173 @@
 	[
 		{
 			"Name":				"Ping",
-			"Description":		"",
-			"Command":			[ "Ping" ],
-			"InputNeeded":		"false",
-			"InputDefault":		"",
+			"Description":		"Just a test command.",
+			"Enabled":			"true",
+			"Modules":			[ "Core" ],
+			"Commands":			[ "Ping" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
 			"MasterCall":		"false",
 			"GroupsLocked":		[  ],
 			"RanksLocked":		[  ],
-			"Text":				[  ]
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ "Pong", "Ping" ]
 		},
 		{
-			"Name":				"RandomBool",
-			"Description":		"",
-			"Command":			[ "GetRandomBool", "RandBool" ],
-			"InputNeeded":		"false",
-			"InputDefault":		"",
+			"Name":				"RandBool",
+			"Description":		"Returns a random bool.",
+			"Enabled":			"true",
+			"Modules":			[ "Core", "Common" ],
+			"Commands":			[ "BoolRand" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
 			"MasterCall":		"false",
 			"GroupsLocked":		[  ],
 			"RanksLocked":		[  ],
-			"Text":				[ "True", "False" ]
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ "Random Bool: .RandBool()[True|False]" ]
 		},
 		{
-			"Name":				"RandomNumber",
-			"Description":		"",
-			"Command":			[ "GetRandomNum", "RandNum" ],
-			"InputNeeded":		"false",
-			"InputDefault":		"",
+			"Name":				"RandNum",
+			"Description":		"Returns a random number.",
+			"Enabled":			"true",
+			"Modules":			[ "Core", "Common" ],
+			"Commands":			[ "NumRand" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
 			"MasterCall":		"false",
 			"GroupsLocked":		[  ],
 			"RanksLocked":		[  ],
-			"Text":				[ ".RandomNum()" ]
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ "Random Number: .RandNum()" ]
 		},
 		{
-			"Name":				"Join",
-			"Description":		"",
-			"Command":			[ "Join" ],
-			"InputNeeded":		"false",
-			"InputDefault":		"",
+			"Name":				"RandColor",
+			"Description":		"Returns a random color.",
+			"Enabled":			"true",
+			"Modules":			[ "Core", "Common" ],
+			"Commands":			[ "ColorRand" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
 			"MasterCall":		"false",
 			"GroupsLocked":		[  ],
 			"RanksLocked":		[  ],
-			"Text":				[ ".JoinGame()" ]
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ "$Username gets blue", "$Username gets red", "$Username gets green", "$Username gets yellow"  ]
 		},
 		{
-			"Name":				"Leave",
-			"Description":		"",
-			"Command":			[ "Leave" ],
-			"InputNeeded":		"false",
-			"InputDefault":		"",
+			"Name":				"Piano",
+			"Description":		"Plays the piano.",
+			"Enabled":			"true",
+			"Modules":			[ "Piano" ],
+			"Commands":			[ "Piano" ],
+			"Inputs": 			[ "String", "Int", "Int" ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"true",
 			"MasterCall":		"false",
 			"GroupsLocked":		[  ],
 			"RanksLocked":		[  ],
-			"Text":				[ ".LeaveGame()" ]
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ ".Piano($Inp1, $Inp2, $Inp3)[|Incorrect Piano Values]" ]
 		},
 		{
-			"Name":				"GetCharacter",
-			"Description":		"",
-			"Command":			[ "GetCharacter", "NewCharacter" ],
-			"InputNeeded":		"false",
-			"InputDefault":		"",
+			"Name":				"QuestionA",
+			"Description":		"Request a question.",
+			"Enabled":			"true",
+			"Modules":			[ "MiniGames" ],
+			"Commands":			[ "Question" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
 			"MasterCall":		"false",
 			"GroupsLocked":		[  ],
 			"RanksLocked":		[  ],
-			"Text":				[ ".GetNewPlayerCharacter()" ]
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ "$Username gets a .QuestionA(12|true)" ]
 		},
 		{
-			"Name":				"GetCharacter",
-			"Description":		"",
-			"Command":			[ "Character" ],
-			"InputNeeded":		"false",
-			"InputDefault":		"",
+			"Name":				"QAnswer",
+			"Description":		"Reply the question.",
+			"Enabled":			"true",
+			"Modules":			[ "MiniGames" ],
+			"Commands":			[ "Answer" ],
+			"Inputs": 			[ "String" ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
 			"MasterCall":		"false",
 			"GroupsLocked":		[  ],
 			"RanksLocked":		[  ],
-			"Text":				[ ".GetPlayerCharacter()" ]
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ ".QAnswer($Username|$Inp1)[Correct $Username, +10 points for you .PointsAdd($Username|10)|Invalid]" ]
+		},
+		{
+			"Name":				"Dice",
+			"Description":		"Roll the dice.",
+			"Enabled":			"true",
+			"Modules":			[ "RPG" ],
+			"Commands":			[ "Dice" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
+			"MasterCall":		"false",
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ "$Username gets a .Dice(12|true)" ]
+		},
+		{
+			"Name":				"JoinRPG",
+			"Description":		"Join to the RPG game.",
+			"Enabled":			"false",
+			"Modules":			[ "RPG" ],
+			"Commands":			[ "JoinRPG" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
+			"MasterCall":		"false",
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
+			"PointsCost":		[ [ "Everyone", "100" ], [ "Subscriber", "10" ] ],
+			"CurrencyCost":		[ [ "Everyone", "0" ] ],
+			"TicketsCost":		[ [ "Everyone", "0" ] ],
+			"Return":			[ ".JoinRPG($Username)[$Username joins the game.|$Username you can't join the game]" ]
+		},
+		{
+			"Name":				"LeaveRPG",
+			"Description":		"Leave the RPG game.",
+			"Enabled":			"false",
+			"Modules":			[ "RPG" ],
+			"Commands":			[ "LeaveRPG" ],
+			"Inputs": 			[  ],
+			"InputsDefault": 	[  ],
+			"AllowMultiInput":	"false",
+			"MasterCall":		"false",
+			"GroupsLocked":		[  ],
+			"RanksLocked":		[  ],
+			"PointsCost":		[  ],
+			"CurrencyCost":		[  ],
+			"TicketsCost":		[  ],
+			"Return":			[ ".LeaveRPG($Username)[$Username joins the game.|]" ]
 		}
 	],
 "AutoCommands":
@@ -110,117 +203,6 @@
 			"InputDefault":		"",
 			"MasterCall":		"false",
 			"Text":				[ ".GetPlayerCharacter()" ]
-		}
-	],
-"PianoCommands":
-	[
-		{
-			"Name":				"C3",
-			"Command":			[ "C3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".C3()" ]
-		},
-		{
-			"Name":				"C#3",
-			"Command":			[ "C#3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".C#3()" ]
-		},
-		{
-			"Name":				"D3",
-			"Command":			[ "D3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".D3()" ]
-		},
-		{
-			"Name":				"EB3",
-			"Command":			[ "EB3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".EB3()" ]
-		},
-		{
-			"Name":				"E3",
-			"Command":			[ "E3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".E3()" ]
-		},
-		{
-			"Name":				"F3",
-			"Command":			[ "F3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".F3()" ]
-		},
-		{
-			"Name":				"F#3",
-			"Command":			[ "F#3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".F#3()" ]
-		},
-		{
-			"Name":				"G3",
-			"Command":			[ "G3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".G3()" ]
-		},
-		{
-			"Name":				"AB3",
-			"Command":			[ "AB3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".AB3()" ]
-		},
-		{
-			"Name":				"A3",
-			"Command":			[ "A3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".A3()" ]
-		},
-		{
-			"Name":				"BB3",
-			"Command":			[ "BB3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".BB3()" ]
-		},
-		{
-			"Name":				"B3",
-			"Command":			[ "B3" ],
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"Text":				[ ".B3()" ]
-		}
-	],
-"DiceCommands":
-	[
-		{
-			"Name":				"Dice",
-			"Command":			[ "Dice", "Roll" ],
-			"InputNeeded":		"true",
-			"InputDefault":		"",
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"DiceGroupCall":	[ "Default" ]
-		}
-	],
-"SkillCommands":
-	[
-		{
-			"Name":				"Attack",
-			"Command":			[ "Attack" ],
-			"InputNeeded":		"true",
-			"InputDefault":		"",
-			"GroupsLocked":		[  ],
-			"RanksLocked":		[  ],
-			"SkillCall":		[  ]
 		}
 	]
 }

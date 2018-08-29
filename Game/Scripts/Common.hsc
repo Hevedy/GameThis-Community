@@ -1,6 +1,36 @@
 {
-"App":
+"Common":
 	{
+		"Modules":
+			[
+				{
+					"Name":			"Core",
+					"Enabled":		"true"
+				},
+				{
+					"Name":			"Common",
+					"Enabled":		"true"
+				},
+				{
+					"Name":			"RPG",
+					"Enabled":		"true"
+				},
+				{
+					"Name":			"Piano",
+					"Enabled":		"true"
+				}
+			],
+		"Variables":
+			[
+				{
+					"Name":			"GString",
+					"Type":			"String"
+				},
+				{
+					"Name":			"GInt",
+					"Type":			"Int"
+				}
+			],
 		"Groups":
 			[
 				{
@@ -31,6 +61,8 @@
 					"Description":	"",
 					"UsePoints":	"true",
 					"Points":		"0",
+					"UseCurrency":	"false",
+					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
 					"UseTime":		"false",
@@ -42,6 +74,8 @@
 					"Description":	"",
 					"UsePoints":	"true",
 					"Points":		"500",
+					"UseCurrency":	"false",
+					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
 					"UseTime":		"false",
@@ -53,6 +87,8 @@
 					"Description":	"",
 					"UsePoints":	"true",
 					"Points":		"1000",
+					"UseCurrency":	"false",
+					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
 					"UseTime":		"false",
@@ -64,6 +100,8 @@
 					"Description":	"",
 					"UsePoints":	"true",
 					"Points":		"5000",
+					"UseCurrency":	"false",
+					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
 					"UseTime":		"false",
@@ -75,6 +113,8 @@
 					"Description":	"",
 					"UsePoints":	"true",
 					"Points":		"10000",
+					"UseCurrency":	"false",
+					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
 					"UseTime":		"false",
