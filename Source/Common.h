@@ -42,20 +42,7 @@ SOFTWARE.
 
 #include <QObject>
 #include "GlobalFunctions.h"
-#include "Commands.h"
-
-enum class ECommonUserGroupList {
-	eDefault,
-	eOther,
-	eStaff,
-	eMod,
-	eEditor,
-	eAdmin,
-	eBotR,
-	eBotRW,
-	eChannel,
-	eOwner
-};
+//#include "Commands.h"
 
 struct FCommonModuleStruct {
 public:
@@ -64,7 +51,7 @@ public:
 	QString nameID;
 	// Name
 	QString name;
-	// Type
+	// Enabled
 	bool enabled;
 
 	FCommonModuleStruct( QString _NameID = "", QString _Name = "", bool _Enabled = false )
@@ -73,23 +60,7 @@ public:
 	, enabled( _Enabled ) {}
 };
 
-struct FCommonVariableStruct {
-public:
-
-	// Name
-	QString nameID;
-	// Name
-	QString name;
-	// Type
-	EVariableTypeList type;
-
-	FCommonVariableStruct( QString _NameID = "", QString _Name = "", EVariableTypeList _Type = EVariableTypeList::eString )
-	: nameID( _NameID )
-	, name( _Name )
-	, type( _Type ) {}
-};
-
-struct FCommonUserGroupStruct {
+struct FCommonEventStruct {
 public:
 
 	// Name
@@ -98,55 +69,36 @@ public:
 	QString name;
 	// Description
 	QString desc;
+	// Costs to enter
+	int costPoints;
+	int costCurrency;
+	int costTickets;
+	int costKeys;
 	// Users list
 	QList<QString> userList;
 
-	FCommonUserGroupStruct( QString _NameID = "", QString _Name = "", QString _Desc = "", QList<QString> _UserList = {} )
+	FCommonEventStruct( QString _NameID = "", QString _Name = "", QString _Desc = "",
+						int _CostPoints = 0, int _CostCurrency = 0, int _CostTickets = 0, int _CostKeys = 0,
+						QList<QString> _UserList = {} )
 	: nameID( _NameID )
 	, name( _Name )
 	, desc( _Desc )
+	, costPoints( _CostPoints )
+	, costCurrency( _CostCurrency )
+	, costTickets( _CostTickets )
+	, costKeys( _CostKeys )
 	, userList( _UserList ){}
 };
 
-struct FCommonUserRankStruct {
+// Cost modifier of commands cost execution
+struct FCommonEventCostStruct {
 public:
-
-	// Name
-	QString nameID;
-	// Name
-	QString name;
-	// Description
-	QString desc;
-	// Use points to unlock
-	bool usePoints;
-	int points;
-	// Use currency to unlock
-	bool useCurrency;
-	int currency;
-	// Use tickects to unlock
-	bool useTickets;
-	int tickets;
-	// Use time to unlock
-	bool useTime;
-	FTimeStruct time;
-	// Is open automatic at level up ?
-	bool open;
-
-	FCommonUserRankStruct( QString _NameID = "", QString _Name = "", QString _Desc = "",
-	bool _UsePoints = false, int _Points = 0, bool _UseCurrency = false, int _Currency = 0,
-	bool _UseTickets = false, int _Tickets = 0, bool _UseTime = false, FTimeStruct _Time = 0.0, bool _Open = false )
-	: nameID( _NameID )
-	, name( _Name )
-	, desc( _Desc )
-	, usePoints( _UsePoints )
-	, points( _Points )
-	, useCurrency( _UseCurrency )
-	, currency( _Currency )
-	, useTickets( _UseTickets )
-	, tickets( _Tickets )
-	, useTime( _UseTime )
-	, time( _Time )
-	, open( _Open ) {}
+    FCommonEventStruct* event;
+    int cost;
+    FCommonEventCostStruct(FCommonEventStruct* _Event, int _Cost = 0) {
+        event = _Event;
+        cost = _Cost;
+    }
 };
 
 class Common : public QObject
@@ -157,8 +109,80 @@ public:
 
     void init();
 
+    // Social global
+    static QString OwnerName;
+    static QString BotName;
+
+    // Twitch
+    static QString TwitchChannelName;
+    static bool TwitchUseMaster;
+    static bool TwitchUseBot;
+    static QString TwitchOwnerUsername;
+    static QString TwitchBotUsername;
+    static QString TwitchUsername;
+    static QString TwitchOwnerToken;
+    static QString TwitchBotToken;
+    static QString TwitchToken;
+    static QList<QString> TwitchBotHelpers;
+
+    static bool TwitchEnabled;
+    // Common
+    static bool TwitchExecuted;
+    static bool TwitchConnected;
+    static bool TwitchOnline;
+    // Master
+    static bool TwitchMExecuted;
+    static bool TwitchMConnected;
+    static bool TwitchMOnline;
+
+    // Dicord
+    static QString DiscordChannelName;
+    static bool DiscordUseMaster;
+    static bool DiscordUseBot;
+    static QString DiscordOwnerUsername;
+    static QString DiscordBotUsername;
+    static QString DiscordUsername;
+    static QString DiscordOwnerToken;
+    static QString DiscordBotToken;
+    static QString DiscordToken;
+    static QList<QString> DiscordBotHelpers;
+
+    static bool DiscordEnabled;
+    // Common
+    static bool DiscordExecuted;
+    static bool DiscordConnected;
+    static bool DiscordOnline;
+    // Master
+    static bool DiscordMExecuted;
+    static bool DiscordMConnected;
+    static bool DiscordMOnline;
+
+    // Steam
+    static bool SteamEnabled;
+    static bool SteamExecuted;
+    static bool SteamConnected;
+    static bool SteamOnline;
+
+    // Global
+    static QString PointsCustomName;
+    static QString CurrencyCustomName;
+    static QString TicketsCustomName;
+    static QString KeysCustomName;
+
+
+    static QList<FCommonModuleStruct*> Modules;
+    static QList<FCommonEventStruct*> Events;
+
+    static bool LoadCommonScripts();
+    static bool LoadScriptModules( QJsonObject _File );
+    static bool LoadScriptEvents( QJsonObject _File );
 
 private:
+
+	static bool ClearModule( FCommonModuleStruct* _Module );
+	static bool ClearModulesArray( QList<FCommonModuleStruct*>& _ModulesArray );
+	static bool ClearEvent( FCommonEventStruct* _Event );
+	static bool ClearEventsArray( QList<FCommonEventStruct*>& _EventsArray );
 
 signals:
 

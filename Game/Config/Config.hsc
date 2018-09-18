@@ -10,7 +10,7 @@
 		"BotToken":				"",
 		"PointsName":			"Points",
 		"CurrencyName":			"Money",
-		"TicketsName":			"Tickects",
+		"TicketsName":			"Tickets",
 		"TriggerUsers":			[  ],
 		"Admins":				[  ],
 		"Editors":				[  ],

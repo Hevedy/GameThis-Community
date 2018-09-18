@@ -65,9 +65,11 @@
 					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
+					"UseKeys":		"false",
+					"Keys":			"0",
 					"UseTime":		"false",
 					"Time":			"0.0",
-					"Open":			"true"
+					"AutoJoin":		"true"
 				},
 				{
 					"Name":			"Novice",
@@ -78,9 +80,11 @@
 					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
+					"UseKeys":		"false",
+					"Keys":			"0",
 					"UseTime":		"false",
 					"Time":			"0.0",
-					"Open":			"true"
+					"AutoJoin":		"true"
 				},
 				{
 					"Name":			"Veteran",
@@ -91,9 +95,11 @@
 					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
+					"UseKeys":		"false",
+					"Keys":			"0",
 					"UseTime":		"false",
 					"Time":			"0.0",
-					"Open":			"true"
+					"AutoJoin":		"true"
 				},
 				{
 					"Name":			"Expert",
@@ -104,9 +110,11 @@
 					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
+					"UseKeys":		"false",
+					"Keys":			"0",
 					"UseTime":		"false",
 					"Time":			"0.0",
-					"Open":			"true"
+					"AutoJoin":		"true"
 				},
 				{
 					"Name":			"Master",
@@ -117,9 +125,48 @@
 					"Currency":		"0",
 					"UseTickets":	"false",
 					"Tickets":		"0",
+					"UseKeys":		"false",
+					"Keys":			"0",
 					"UseTime":		"false",
 					"Time":			"0.0",
-					"Open":			"true"
+					"AutoJoin":		"true"
+				}
+			],
+		"Events":
+			[
+				{
+					"Name":			"Event1",
+					"Description":	"",
+					"Enabled":		"false",
+					"Open":			"false",
+					"UsePoints":	"false",
+					"Points":		"0",
+					"UseCurrency":	"false",
+					"Currency":		"0",
+					"UseTickets":	"false",
+					"Tickets":		"0",
+					"UseKeys":		"false",
+					"Keys":			"0",
+					"UseTime":		"false",
+					"Time":			"0.0",
+					"AutoJoin":		"true"
+				},
+				{
+					"Name":			"Event2",
+					"Description":	"",
+					"Enabled":		"false",
+					"Open":			"false",
+					"UsePoints":	"false",
+					"Points":		"0",
+					"UseCurrency":	"false",
+					"Currency":		"0",
+					"UseTickets":	"false",
+					"Tickets":		"0",
+					"UseKeys":		"false",
+					"Keys":			"0",
+					"UseTime":		"false",
+					"Time":			"0.0",
+					"AutoJoin":		"false"
 				}
 			]
 	}
