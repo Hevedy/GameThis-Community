@@ -39,6 +39,8 @@ SOFTWARE.
 
 #include "Scripting.h"
 #include "MiniGames.h"
+#include "Commands.h"
+#include "Users.h"
 
 
 QList<FScrGlobalVarStruct*> Scripting::GlobalVars;
@@ -80,12 +82,162 @@ void Scripting::init() {
 }
 
 void Scripting::AddCoreFunctions() {
+
 	// Implicits = $username, $inp1
 	// functions return true, false and the text split by /
+	// Read functions from last to first to make sure longer names are checked before
 
-	// Cuando leas los comandos leer desde el ultimo por si depende del anterior
+	QList<FScrTokenStruct*> tokens;
+	tokens << new FScrTokenStruct( "ChannelName", EScrTokenList::eChannelN );
+	tokens << new FScrTokenStruct( "MasterName", EScrTokenList::eMasterN );
+	tokens << new FScrTokenStruct( "OwnerName", EScrTokenList::eOwnerN );
+	tokens << new FScrTokenStruct( "BotName", EScrTokenList::eBotN );
+	tokens << new FScrTokenStruct( "PointsName", EScrTokenList::ePointsN );
+	tokens << new FScrTokenStruct( "CurrencyName", EScrTokenList::eCurrencyN );
+	tokens << new FScrTokenStruct( "TicketsName", EScrTokenList::eTicketsN );
+	tokens << new FScrTokenStruct( "KeysName", EScrTokenList::eKeysN );
+	tokens << new FScrTokenStruct( "UserName", EScrTokenList::eUserN );
+	tokens << new FScrTokenStruct( "TargetName", EScrTokenList::eUserTargetN );
+	tokens << new FScrTokenStruct( "UPoints", EScrTokenList::ePoints );
+	tokens << new FScrTokenStruct( "UCurrency", EScrTokenList::eCurrency );
+	tokens << new FScrTokenStruct( "UTickets", EScrTokenList::eTickets );
+	tokens << new FScrTokenStruct( "UKeys", EScrTokenList::eKeys );
+
+	qDeleteAll(Tokens);
+	Tokens.clear();
+	Tokens = tokens;
+
 	QList<FScrFunctionStruct*> functions;
+	functions << new FScrFunctionStruct( "Ping", EScrFunctionList::ePing, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "SoundPlay", EScrFunctionList::eSoundPlay, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NL", EScrFunctionList::eNL, false, false,
+	{ }, EVariableTypeList::eVoid );
 
+	functions << new FScrFunctionStruct( "BoolRand", EScrFunctionList::eMBoolRand, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NumRand", EScrFunctionList::eMNumRand, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NumRandR", EScrFunctionList::eMNumRandRange, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NumAdd", EScrFunctionList::eMNumAdd, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NumSub", EScrFunctionList::eMNumSub, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NumMul", EScrFunctionList::eMNumMul, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NumDiv", EScrFunctionList::eMNumDiv, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "NumMod", EScrFunctionList::eMNumMod, false, false,
+	{ }, EVariableTypeList::eVoid );
+
+	functions << new FScrFunctionStruct( "ReadFileLine", EScrFunctionList::eIOReadFileLine, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "ReadRandLine", EScrFunctionList::eIOReadRandLine, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "SaveFileLine", EScrFunctionList::eIOSaveFileLine, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "SaveFileLastLine", EScrFunctionList::eIOSaveFileLastLine, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "SaveFileOverwrite", EScrFunctionList::eIOSaveFileOverwrite, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "ReadWeb", EScrFunctionList::eIOReadWeb, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "ReadWebLine", EScrFunctionList::eIOReadWebLine, false, false,
+	{ }, EVariableTypeList::eVoid );
+
+	functions << new FScrFunctionStruct( "UserGroupGet", EScrFunctionList::eUserGroupGet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserGroupAdd", EScrFunctionList::eUserGroupAdd, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserGroupRem", EScrFunctionList::eUserGroupRem, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserRankGet", EScrFunctionList::eUserRankGet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserRankSet", EScrFunctionList::eUserRankSet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventStart", EScrFunctionList::eEventStart, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventEnd", EScrFunctionList::eEventEnd, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventOpen", EScrFunctionList::eEventOpen, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventClose", EScrFunctionList::eEventClose, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventUserJoin", EScrFunctionList::eEventUserJoin, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventUserLeave", EScrFunctionList::eEventUserLeave, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventUserSet", EScrFunctionList::eEventUserSet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "EventUserRem", EScrFunctionList::eEventUserRem, false, false,
+	{ }, EVariableTypeList::eVoid );
+
+	functions << new FScrFunctionStruct( "UserPointsGet", EScrFunctionList::eUserPointsGet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserPointsAdd", EScrFunctionList::eUserPointsAdd, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserPointsSub", EScrFunctionList::eUserPointsSub, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserPointsSet", EScrFunctionList::eUserPointsSet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserPointsGive", EScrFunctionList::eUserPointsGive, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserCurrencyGet", EScrFunctionList::eUserCurrencyGet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserCurrencyAdd", EScrFunctionList::eUserCurrencyAdd, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserCurrencySub", EScrFunctionList::eUserCurrencySub, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserCurrencySet", EScrFunctionList::eUserCurrencySet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserCurrencyGive", EScrFunctionList::eUserCurrencyGive, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserTicketsGet", EScrFunctionList::eUserTicketsGet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserTicketsAdd", EScrFunctionList::eUserTicketsAdd, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserTicketsSub", EScrFunctionList::eUserTicketsSub, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserTicketsSet", EScrFunctionList::eUserTicketsSet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserTicketsGive", EScrFunctionList::eUserTicketsGive, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserKeysGet", EScrFunctionList::eUserKeysGet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserKeysAdd", EScrFunctionList::eUserKeysAdd, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserKeysSub", EScrFunctionList::eUserKeysSub, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserKeysSet", EScrFunctionList::eUserKeysSet, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "UserKeysGive", EScrFunctionList::eUserKeysGive, false, false,
+	{ }, EVariableTypeList::eVoid );
+
+	functions << new FScrFunctionStruct( "MGChest", EScrFunctionList::eMGChest, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "MGChestSpawn", EScrFunctionList::eMGChestSpawn, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "MGDiceRoll", EScrFunctionList::eMGDiceRoll, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "MGQAQuestion", EScrFunctionList::eMGQAQuestion, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "MGQAAnswer", EScrFunctionList::eMGQAAnswer, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "MGPianoPlay", EScrFunctionList::eMGPianoPlay, false, false,
+	{ }, EVariableTypeList::eVoid );
+
+	functions << new FScrFunctionStruct( "RPGJoin", EScrFunctionList::eRPGJoin, false, false,
+	{ }, EVariableTypeList::eVoid );
+	functions << new FScrFunctionStruct( "RPGLeave", EScrFunctionList::eRPGLeave, false, false,
+	{ }, EVariableTypeList::eVoid );
+
+	qDeleteAll(Functions);
+	Functions.clear();
+	Functions = functions;
+
+	/*
 	functions << new FScrFunctionStruct( ".Ping()", EScrFunctionList::ePing, false, false, { }, false );
 	functions << new FScrFunctionStruct( ".Chest()", EScrFunctionList::ePing, false, false, { }, true );
 	functions << new FScrFunctionStruct( ".JoinRPG()", EScrFunctionList::ePing, false, false, { }, true );
@@ -160,7 +312,7 @@ void Scripting::AddCoreFunctions() {
 
 	qDeleteAll(Functions); // Prevent leaks of pointers keep on nowhere
 	Functions.clear();
-	Functions = functions;
+	Functions = functions;*/
 }
 
 bool Scripting::LoadScriptingScripts() {
@@ -254,8 +406,9 @@ bool Scripting::LoadScriptGlobalVars( QJsonObject _File ) {
 			variables << variable;
 		}
 	}
-	qDeleteAll(GlobalVars);
-	GlobalVars.clear();
+	ClearGlobalVarsArray(GlobalVars);
+	//qDeleteAll(GlobalVars);
+	//GlobalVars.clear();
 	GlobalVars = variables;
 	// Because the errors already has been pulled
 	return true;
@@ -362,6 +515,134 @@ bool Scripting::ValidateCommandScript( bool _Runtime, QString _Script, FCommandS
 			break;
 	}
 }
+
+bool Scripting::ValidateCommandScript( bool _Runtime, QString _Script, FCommandStruct* _Command, FUserStruct* _User ) {
+	QString lString = _Script;
+
+
+	//lString.replace()
+	FUserStruct* user = _User;
+	FUserStruct* userTarget = _User;
+	FCommandStruct* command = _Command;
+	EScrTokenList tokenID;
+	QString prefix = "$";
+	// First replace the inputs in the script with given values
+	// User info
+	if( lString.contains( prefix + "Username", Qt::CaseInsensitive ) ) {
+		lString = lString.replace( prefix + "Username", _User->name, Qt::CaseInsensitive );
+	}
+	if( lString.contains( prefix + "Points", Qt::CaseInsensitive ) ) {
+		lString = lString.replace( prefix + "Points", QString::number(_User->pointsNum), Qt::CaseInsensitive );
+	}
+	if( lString.contains( prefix + "Currency", Qt::CaseInsensitive ) ) {
+		lString = lString.replace( prefix + "Currency", QString::number(_User->currencyNum), Qt::CaseInsensitive );
+	}
+	if( lString.contains( prefix + "Tickets", Qt::CaseInsensitive ) ) {
+		lString = lString.replace( prefix + "Tickets", QString::number(_User->ticketsNum), Qt::CaseInsensitive );
+	}
+	if( lString.contains( prefix + "Tickets", Qt::CaseInsensitive ) ) {
+		lString = lString.replace( prefix + "Tickets", QString::number(_User->ticketsNum), Qt::CaseInsensitive );
+	}
+
+
+	QString value = "Error";
+	switch( tokenID ) {
+		case EScrTokenList::eChannelN:
+			value = ScrTkGetChannelName();
+			break;
+		case EScrTokenList::eMasterN:
+			value = ScrTkGetMasterName();
+			break;
+		case EScrTokenList::eOwnerN:
+			value = ScrTkGetOwnerName();
+			break;
+		case EScrTokenList::eBotN:
+			value = ScrTkGetBotName();
+			break;
+		case EScrTokenList::ePointsN:
+			value = ScrTkGetPointsName();
+			break;
+		case EScrTokenList::eCurrencyN:
+			value = ScrTkGetCurrencyName();
+			break;
+		case EScrTokenList::eTicketsN:
+			value = ScrTkGetTicketsName();
+			break;
+		case EScrTokenList::eKeysN:
+			value = ScrTkGetKeysName();
+			break;
+		case EScrTokenList::eUserN:
+			value = ScrTkGetUserName( user );
+			break;
+		case EScrTokenList::eUserTargetN:
+			value = ScrTkGetUserName( userTarget );
+			break;
+		case EScrTokenList::ePoints:
+			value = ScrTkGetUserPoints( user );
+			break;
+		case EScrTokenList::eCurrency:
+			value = ScrTkGetUserCurrency( user );
+			break;
+		case EScrTokenList::eTickets:
+			value = ScrTkGetUserTickets( user );
+			break;
+		case EScrTokenList::eKeys:
+			value = ScrTkGetUserKeys( user );
+			break;
+		case EScrTokenList::eNone:
+			value = "Error";
+		default:
+			value = "Error";
+			break;
+	}
+
+	// Inputs info and other info
+	if( lString.contains( prefix + "Target", Qt::CaseInsensitive ) ) {
+		lString = lString.replace( prefix + "Target", _User->name, Qt::CaseInsensitive );
+	}
+	for( int i = 0; i < 10; i++ ) {
+		if ( lString.contains( prefix + "Inp" + QString::number(i), Qt::CaseInsensitive ) ) {
+			lString = lString.replace( prefix + "Inp" + QString::number(i), userCommand->inputs[i].inputs[0], Qt::CaseInsensitive );
+		}
+	}
+
+	// Replace global vars values
+	for( int i = 0; i < GlobalVars.size(); i++ ) {
+		if( lString.contains( prefix + GlobalVars[i]->name, Qt::CaseInsensitive ) ) {
+			QString type;
+			switch( GlobalVars[i]->type )   {
+				case EVariableTypeList::eBool:
+					type = (qFloor(GlobalVars[i]->valueLogic) == 1 ? "True" : "False");
+					break;
+				case EVariableTypeList::eFloat:
+					type = QString::number(GlobalVars[i]->valueLogic);
+					break;
+				case EVariableTypeList::eInt:
+					type = QString::number(qFloor(GlobalVars[i]->valueLogic));
+					break;
+				case EVariableTypeList::eString:
+					type = GlobalVars[i]->value;
+					break;
+			}
+			lString = lString.replace( prefix + GlobalVars[i]->name, GlobalVars[i]->value, Qt::CaseInsensitive );
+		}
+	}
+
+	// After this check and divide each function to check individually and calculate individually
+
+	QString lChar;
+	int lStringSize = lString.size();
+
+	for( int c = 0; c < lStringSize; c++  ) {
+
+	}
+
+	switch( lChar ) {
+		case "":
+			break;
+	}
+}
+
 
 bool Scripting::ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, const QString _Input, const EVariableTypeList _Type ) {
 	if( _Input == "" || _Input == " " || _Input.isNull() || _Input.isEmpty() ) {

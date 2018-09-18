@@ -54,209 +54,6 @@ SOFTWARE.
 #define SCRIPT_LENGTHMAX 1000
 
 
-struct FScrGlobalVarStruct {
-public:
-
-	// Name
-	QString nameID;
-	// Name
-	QString name;
-	// Type
-	EVariableTypeList type;
-	// value
-	QString value;
-	float valueLogic;
-
-	FScrGlobalVarStruct( QString _NameID = "", QString _Name = "", EVariableTypeList _Type = EVariableTypeList::eString, QString _Value = "" )
-	: nameID( _NameID )
-	, name( _Name )
-	, type( _Type )
-	, value( _Value ) {}
-};
-
-enum class EScrVarTypeList {
-	eNone,
-	// Names
-	eBool,
-	eFloat,
-	eInt,
-	eString,
-	eUser,
-	eGroup,
-	eRank,
-	eModule,
-	eEvent
-};
-
-// Used to preload vars into a container for faster access
-struct FScrVarContainerStruct {
-public:
-
-	EVariableTypeList varType;
-	bool varBool;
-	float varFloat;
-	int varInt;
-	QString varString;
-	FUserStruct varUser;
-	FUserGroupStruct varGroup;
-	FUserRankStruct varRank;
-
-};
-
-// Function call procesed before to be stored on command
-struct FScrFunctionContainerStruct {
-public:
-
-	// Name
-	QString functionName;
-
-	QList<QString> inputs;
-	// Need Master
-	bool master;
-	// Force safe lock to the admins and master groups or channel or bots
-	// Can be a danger if a user uses it
-	bool safeLock;
-	// Inputs
-	QList<EVariableTypeList> inputClasses;
-	// Return true or false functions
-	bool trueFalse;
-
-
-	FScrFunctionContainerStruct( QString _FunctionName = "", bool* _FunctionRef(int) = nullptr, bool _Master = false, bool _SafeLock = true,
-							QList<EVariableTypeList> _InputClasses = {}, bool _TrueFalse = false )
-	: functionName( _FunctionName )
-	, functionRef( _FunctionRef )
-	, master( _Master )
-	, safeLock( _SafeLock )
-	, inputClasses( _InputClasses )
-	, trueFalse( _TrueFalse ) {}
-};
-
-// Token list for reference
-enum class EScrTokenList {
-	eNone,
-	// Names
-	eChannelN,
-	ePointsN,
-	eCurrencyN,
-	eTicketsN,
-	eKeysN,
-	eUserTarget,
-	eUserN,
-	// Number
-	ePoints,
-	eCurrency,
-	eTickets,
-	eKeys
-
-};
-
-// Function list for reference
-enum class EScrFunctionList {
-	eNone,
-	// Tools
-	ePing,
-	eSoundPlay,
-	eNL,
-	// Math
-	eMBoolRand,
-	eMNumRand,
-	eMNumRandRange,
-	eMNumAdd,
-	eMNumSub,
-	eMNumMul,
-	eMNumDiv,
-	eMNumMod,
-	// IO
-	eIOReadFileLine,
-	eIOReadRandLine,
-	eIOSaveFileLine,
-	eIOSaveFileLastLine,
-	eIOSaveFileOverwrite,
-	eIOReadWeb,
-	eIOReadWebLine,
-	// Users manager
-	eUserGroupGet,
-	eUserGroupAdd,
-	eUserGroupRem,
-	eUserRankGet,
-	eUserRankSet,
-	// Events
-	eEventStart,
-	eEventEnd,
-	eEventOpen,
-	eEventClose,
-	eEventUserJoin,
-	eEventUserLeave,
-	eEventUserSet,
-	eEventUserRem,
-	// Users currency
-	eUserPointsGet,
-	eUserPointsAdd,
-	eUserPointsSub,
-	eUserPointsSet,
-	eUserPointsGive,
-	eUserCurrencyGet,
-	eUserCurrencyAdd,
-	eUserCurrencySub,
-	eUserCurrencySet,
-	eUserCurrencyGive,
-	eUserTicketsGet,
-	eUserTicketsAdd,
-	eUserTicketsSub,
-	eUserTicketsSet,
-	eUserTicketsGive,
-	eUserKeysGet,
-	eUserKeysAdd,
-	eUserKeysSub,
-	eUserKeysSet,
-	eUserKeysGive,
-	// Minigames
-	eMGChest,
-	eMGChestSpawn,
-	eMGDiceRoll,
-	eMGQAQuestion,
-	eMGQAAnswer,
-	eMGPianoPlay,
-	// RPG Game
-	eRPGJoin,
-	eRPGLeave
-};
-
-// Direct reference to function, removed as are dynamic
-//bool (*functionRef)(int);
-//bool (*_FunctionRef)(int) = nullptr
-
-// Registered functions for list
-struct FScrFunctionStruct {
-public:
-
-	// Name
-	QString functionName;
-	// Function ID
-	EScrFunctionList functionRef;
-	// Need Master
-	bool master;
-	// Force safe lock to the admins and master groups or channel or bots
-	// Can be a danger if a user uses it
-	bool safeLock;
-	// Inputs
-	QList<EVariableTypeList> inputClasses;
-	// Return true or false functions
-	bool trueFalse;
-
-
-	FScrFunctionStruct( QString _FunctionName = "", EScrFunctionList _FunctionRef = EScrFunctionList::eNone, bool _Master = false, bool _SafeLock = true,
-							QList<EVariableTypeList> _InputClasses = {}, bool _TrueFalse = false )
-	: functionName( _FunctionName )
-	, functionRef( _FunctionRef )
-	, master( _Master )
-	, safeLock( _SafeLock )
-	, inputClasses( _InputClasses )
-	, trueFalse( _TrueFalse ) {}
-};
-
-
 class Scripting : public QObject
 {
     Q_OBJECT
@@ -268,22 +65,22 @@ public:
 	
 
 	static QList<FScrGlobalVarStruct*> GlobalVars;
+	static QList<FScrTokenStruct*> Tokens;
 	static QList<FScrFunctionStruct*> Functions;
 
     static bool ClearGlobalVar( FScrGlobalVarStruct* _Var );
     static bool ClearGlobalVarsArray( QList<FScrGlobalVarStruct*>& _VarsArray );
-    static bool ClearFunction( FScrFunctionStruct* _Function );
-    static bool ClearFunctionsArray( QList<FScrFunctionStruct*>& _FunctionsArray );
-
 
 	static void AddCoreFunctions();
 	static bool LoadScriptingScripts();
 	static bool LoadScriptGlobalVars( QJsonObject _File );
-	static bool ValidateCommandScript( bool _Runtime, QString _Script, FCommandStruct* _Command, FUserStruct* _User );
+
+	static bool ScriptValidateCommandScript( bool _Runtime, QString _Script, FCommandStruct* _Command, FUserStruct* _User );
+	static void ScriptFormatString();
 	static bool ScriptTokenResolve( QString& _Script, FUserStruct* _UserSender, FUserStruct* _UserTarget );
 
-	static bool ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, const QString _Input, const EVariableTypeList _Type );
-	static bool ValidateScrVarArrayInputs( QList<FScrVarContainerStruct>& _VarContainer, const QList<QString> _Inputs, const QList<EVariableTypeList> _Types );
+	static bool ScriptValidateScrVarInput( FScrVarContainerStruct& _VarContainer, const QString _Input, const EVariableTypeList _Type );
+	static bool ScriptValidateScrVarArrayInputs( QList<FScrVarContainerStruct>& _VarContainer, const QList<QString> _Inputs, const QList<EVariableTypeList> _Types );
 
 	// Helpers
 	static bool ScrResolveUserByName( const QString _Name, FUserStruct* _User );

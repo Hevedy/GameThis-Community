@@ -44,6 +44,208 @@ SOFTWARE.
 #include "GlobalFunctions.h"
 //#include "Commands.h"
 
+// Global vars struct
+struct FScrGlobalVarStruct {
+	// Name
+	QString nameID;
+	// Name
+	QString name;
+	// Type
+	EVariableTypeList type;
+	// value
+	QString value;
+	float valueLogic;
+
+	FScrGlobalVarStruct( QString _NameID = "", QString _Name = "", EVariableTypeList _Type = EVariableTypeList::eString, QString _Value = "" )
+	: nameID( _NameID )
+	, name( _Name )
+	, type( _Type )
+	, value( _Value ) {}
+};
+
+// Used to preload vars into a container for faster access
+struct FScrVarContainerStruct {
+	EVariableTypeList varType;
+	bool varBool;
+	float varFloat;
+	int varInt;
+	QString varString;
+
+	FScrVarContainerStruct( EVariableTypeList _VarType = EVariableTypeList::eBool, bool _VarBool = false,
+	float _VarFloat = 0.0, int _VarInt = 0, QString _VarString = "" )
+	: varType( _VarType )
+	, varBool( _VarBool )
+	, varFloat( _VarFloat )
+	, varInt( _VarInt )
+	, varString( _VarString ) {}
+};
+
+// Function call procesed before to be stored on command
+struct FScrFunctionContainerStruct {
+	// Name
+	QString functionName;
+
+	QList<QString> inputs;
+	// Need Master
+	bool master;
+	// Force safe lock to the admins and master groups or channel or bots
+	// Can be a danger if a user uses it
+	bool safeLock;
+	// Inputs
+	QList<EVariableTypeList> inputClasses;
+	// Return true or false functions
+	bool trueFalse;
+
+
+	FScrFunctionContainerStruct( QString _FunctionName = "", bool _Master = false, bool _SafeLock = true,
+							QList<EVariableTypeList> _InputClasses = {}, bool _TrueFalse = false )
+	: functionName( _FunctionName )
+	, master( _Master )
+	, safeLock( _SafeLock )
+	, inputClasses( _InputClasses )
+	, trueFalse( _TrueFalse ) {}
+};
+
+// Token list for reference
+enum class EScrTokenList {
+	eNone,
+	// Names
+	eChannelN,
+	eMasterN,
+	eOwnerN,
+	eBotN,
+	ePointsN,
+	eCurrencyN,
+	eTicketsN,
+	eKeysN,
+	eUserN,
+	eUserTargetN,
+	// Number
+	ePoints,
+	eCurrency,
+	eTickets,
+	eKeys
+};
+
+struct FScrTokenStruct {
+	// Name
+	QString name;
+	// Type
+	EScrTokenList type;
+
+	FScrTokenStruct( QString _Name = "", EScrTokenList _Type = EScrTokenList::eNone )
+	: name( _Name )
+	, type( _Type ) {}
+};
+
+// Function list for reference
+enum class EScrFunctionList {
+	eNone,
+	// Tools
+	ePing,
+	eSoundPlay,
+	eNL,
+	// Math
+	eMBoolRand,
+	eMNumRand,
+	eMNumRandRange,
+	eMNumAdd,
+	eMNumSub,
+	eMNumMul,
+	eMNumDiv,
+	eMNumMod,
+	// IO
+	eIOReadFileLine,
+	eIOReadRandLine,
+	eIOSaveFileLine,
+	eIOSaveFileLastLine,
+	eIOSaveFileOverwrite,
+	eIOReadWeb,
+	eIOReadWebLine,
+	// Users manager
+	eUserGroupGet,
+	eUserGroupAdd,
+	eUserGroupRem,
+	eUserRankGet,
+	eUserRankSet,
+	// Events
+	eEventStart,
+	eEventEnd,
+	eEventOpen,
+	eEventClose,
+	eEventUserJoin,
+	eEventUserLeave,
+	eEventUserSet,
+	eEventUserRem,
+	// Users currency
+	eUserPointsGet,
+	eUserPointsAdd,
+	eUserPointsSub,
+	eUserPointsSet,
+	eUserPointsGive,
+	eUserCurrencyGet,
+	eUserCurrencyAdd,
+	eUserCurrencySub,
+	eUserCurrencySet,
+	eUserCurrencyGive,
+	eUserTicketsGet,
+	eUserTicketsAdd,
+	eUserTicketsSub,
+	eUserTicketsSet,
+	eUserTicketsGive,
+	eUserKeysGet,
+	eUserKeysAdd,
+	eUserKeysSub,
+	eUserKeysSet,
+	eUserKeysGive,
+	// Minigames
+	eMGChest,
+	eMGChestSpawn,
+	eMGDiceRoll,
+	eMGQAQuestion,
+	eMGQAAnswer,
+	eMGPianoPlay,
+	// RPG Game
+	eRPGJoin,
+	eRPGLeave
+};
+
+// Direct reference to function, removed as are dynamic
+//bool (*functionRef)(int);
+//bool (*_FunctionRef)(int) = nullptr
+
+// Registered functions for list
+struct FScrFunctionStruct {
+	// Name
+	QString functionName;
+	// Function ID
+	EScrFunctionList functionRef;
+	// Need Master
+	bool master;
+	// Force safe lock to the admins and master groups or channel or bots
+	// Can be a danger if a user uses it
+	bool safeLock;
+	// Inputs
+	QList<EVariableTypeList> inputClasses;
+	// Return true or false functions
+	// Nos based in type if bool then can choose
+	EVariableTypeList returnType;
+
+
+	FScrFunctionStruct( QString _FunctionName = "", EScrFunctionList _FunctionRef = EScrFunctionList::eNone, bool _Master = false, bool _SafeLock = true,
+							QList<EVariableTypeList> _InputClasses = {}, EVariableTypeList _ReturnType = EVariableTypeList::eVoid )
+	: functionName( _FunctionName )
+	, functionRef( _FunctionRef )
+	, master( _Master )
+	, safeLock( _SafeLock )
+	, inputClasses( _InputClasses )
+	, returnType( _ReturnType ) {}
+};
+
+///
+/// COMMON
+///
+
 struct FCommonModuleStruct {
 public:
 
