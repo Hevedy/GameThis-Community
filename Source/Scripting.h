@@ -267,8 +267,14 @@ public:
 	static void init();
 	
 
-	static QList<FScrFunctionStruct*> Functions;
 	static QList<FScrGlobalVarStruct*> GlobalVars;
+	static QList<FScrFunctionStruct*> Functions;
+
+    static bool ClearGlobalVar( FScrGlobalVarStruct* _Var );
+    static bool ClearGlobalVarsArray( QList<FScrGlobalVarStruct*>& _VarsArray );
+    static bool ClearFunction( FScrFunctionStruct* _Function );
+    static bool ClearFunctionsArray( QList<FScrFunctionStruct*>& _FunctionsArray );
+
 
 	static void AddCoreFunctions();
 	static bool LoadScriptingScripts();
@@ -283,7 +289,7 @@ public:
 	static bool ScrResolveUserByName( const QString _Name, FUserStruct* _User );
 	static bool ScrResolveGroupByName( const QString _Name, FUserGroupStruct* _Group );
 	static bool ScrResolveRankByName( const QString _Name, FUserRankStruct* _Rank );
-	static bool ScrResolveModuleByName( const QString _Name, FCommonModuleStruct* _Event );
+	static bool ScrResolveModuleByName( const QString _Name, FCommonModuleStruct* _Module );
 	static bool ScrResolveEventByName( const QString _Name, FCommonEventStruct* _Event );
 
 	//
@@ -292,12 +298,15 @@ public:
 
 	// Token Helpers
 	static QString ScrTkGetChannelName();
+	static QString ScrTkGetMasterName();
+	static QString ScrTkGetOwnerName();
+	static QString ScrTkGetBotName();
 	static QString ScrTkGetPointsName();
 	static QString ScrTkGetCurrencyName();
 	static QString ScrTkGetTicketsName();
 	static QString ScrTkGetKeysName();
 	// Get target user from list using name
-	static bool ScrTkGetUserTarget( QString _Name, FUserStruct& _Target );
+	static bool ScrTkGetUserTarget( QString _Name, FUserStruct* _Target );
 	// General user info
 	static QString ScrTkGetUserName( FUserStruct* _User );
 	static QString ScrTkGetUserPoints( FUserStruct* _User );
@@ -316,12 +325,12 @@ public:
 	// Math
 	static bool ScrFuncMBoolRand( QString& _Return );
 	static bool ScrFuncMNumRand( QString& _Return );
-	static bool ScrFuncMNumRandRange( QString& _Return, const QString _Min, const QString _Max );
-	static bool ScrFuncMNumAdd( QString& _Return, const QString _NumA, const QString _NumB );
-	static bool ScrFuncMNumSub( QString& _Return, const QString _NumA, const QString _NumB );
-	static bool ScrFuncMNumMul( QString& _Return, const QString _NumA, const QString _NumB );
-	static bool ScrFuncMNumDiv( QString& _Return, const QString _NumA, const QString _NumB );
-	static bool ScrFuncMNumMod( QString& _Return, const QString _NumA, const QString _NumB );
+	static bool ScrFuncMNumRandRange( QString& _Return,  const int _Min, const int _Max );
+	static bool ScrFuncMNumAdd( QString& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumSub( QString& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumMul( QString& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumDiv( QString& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumMod( QString& _Return, const int _NumA, const int _NumB );
 	// IO
 	static bool ScrFuncIOReadFileLine( QString& _Return, const QString _File, const int _Line );
 	static bool ScrFuncIOReadRandLine( QString& _Return, const QString _File );
@@ -346,22 +355,22 @@ public:
 	static bool ScrFuncEventUserSet( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
 	static bool ScrFuncEventUserRem( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
 	// Users currency
-	static bool ScrFuncUserPointsGet( QString& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserPointsGet( QString& _Return, FUserStruct* _User, const bool _Total );
 	static bool ScrFuncUserPointsAdd( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserPointsSub( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserPointsSet( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserPointsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserCurrencyGet( QString& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserCurrencyGet( QString& _Return, FUserStruct* _User, const bool _Total );
 	static bool ScrFuncUserCurrencyAdd( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserCurrencySub( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserCurrencySet( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserCurrencyGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserTicketsGet( QString& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserTicketsGet( QString& _Return, FUserStruct* _User, const bool _Total );
 	static bool ScrFuncUserTicketsAdd( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserTicketsSub( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserTicketsSet( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserTicketsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserKeysGet( QString& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserKeysGet( QString& _Return, FUserStruct* _User, const bool _Total );
 	static bool ScrFuncUserKeysAdd( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserKeysSub( QString& _Return, FUserStruct* _User, const int _Amount );
 	static bool ScrFuncUserKeysSet( QString& _Return, FUserStruct* _User, const int _Amount );

@@ -38,13 +38,35 @@ SOFTWARE.
 
 
 #include "Scripting.h"
+#include "MiniGames.h"
 
 
+QList<FScrGlobalVarStruct*> Scripting::GlobalVars;
 QList<FScrFunctionStruct*> Scripting::Functions;
 
-QList<FScrModuleStruct*> Scripting::Modules;
-QList<FScrGlobalVarStruct*> Scripting::GlobalVars;
+bool Scripting::ClearGlobalVar( FScrGlobalVarStruct* _Var ) {
+	delete _Var;
+	_Var = nullptr;
+	return true;
+}
 
+bool Scripting::ClearGlobalVarsArray( QList<FScrGlobalVarStruct*>& _VarsArray ) {
+	qDeleteAll(_VarsArray);
+	_VarsArray.clear();
+	return true;
+}
+
+bool Scripting::ClearFunction( FScrFunctionStruct* _Function ) {
+	delete _Function;
+	_Function = nullptr;
+	return true;
+}
+
+bool Scripting::ClearFunctionsArray( QList<FScrFunctionStruct*>& _FunctionsArray ) {
+	qDeleteAll(_FunctionsArray);
+	_FunctionsArray.clear();
+	return true;
+}
 
 Scripting::Scripting(QObject *parent) : QObject(parent)
 {
@@ -250,19 +272,19 @@ bool Scripting::ValidateCommandScript( bool _Runtime, QString _Script, FCommandS
 	QString prefix = "$";
 	// First replace the inputs in the script with given values
 	// User info
-	if ( lString.contains( prefix + "Username", Qt::CaseInsensitive ) ) {
+	if( lString.contains( prefix + "Username", Qt::CaseInsensitive ) ) {
 		lString = lString.replace( prefix + "Username", _User->name, Qt::CaseInsensitive );
 	}
-	if ( lString.contains( prefix + "Points", Qt::CaseInsensitive ) ) {
+	if( lString.contains( prefix + "Points", Qt::CaseInsensitive ) ) {
 		lString = lString.replace( prefix + "Points", QString::number(_User->pointsNum), Qt::CaseInsensitive );
 	}
-	if ( lString.contains( prefix + "Currency", Qt::CaseInsensitive ) ) {
+	if( lString.contains( prefix + "Currency", Qt::CaseInsensitive ) ) {
 		lString = lString.replace( prefix + "Currency", QString::number(_User->currencyNum), Qt::CaseInsensitive );
 	}
-	if ( lString.contains( prefix + "Tickets", Qt::CaseInsensitive ) ) {
+	if( lString.contains( prefix + "Tickets", Qt::CaseInsensitive ) ) {
 		lString = lString.replace( prefix + "Tickets", QString::number(_User->ticketsNum), Qt::CaseInsensitive );
 	}
-	if ( lString.contains( prefix + "Tickets", Qt::CaseInsensitive ) ) {
+	if( lString.contains( prefix + "Tickets", Qt::CaseInsensitive ) ) {
 		lString = lString.replace( prefix + "Tickets", QString::number(_User->ticketsNum), Qt::CaseInsensitive );
 	}
 
@@ -295,18 +317,18 @@ bool Scripting::ValidateCommandScript( bool _Runtime, QString _Script, FCommandS
 	}
 
 	// Inputs info and other info
-	if ( lString.contains( prefix + "Target", Qt::CaseInsensitive ) ) {
+	if( lString.contains( prefix + "Target", Qt::CaseInsensitive ) ) {
 		lString = lString.replace( prefix + "Target", _User->name, Qt::CaseInsensitive );
 	}
-	for ( int i = 0; i < 10; i++ ) {
+	for( int i = 0; i < 10; i++ ) {
 		if ( lString.contains( prefix + "Inp" + QString::number(i), Qt::CaseInsensitive ) ) {
 			lString = lString.replace( prefix + "Inp" + QString::number(i), userCommand->inputs[i].inputs[0], Qt::CaseInsensitive );
 		}
 	}
 
 	// Replace global vars values
-	for ( int i = 0; i < GlobalVars.size(); i++ ) {
-		if ( lString.contains( prefix + GlobalVars[i]->name, Qt::CaseInsensitive ) ) {
+	for( int i = 0; i < GlobalVars.size(); i++ ) {
+		if( lString.contains( prefix + GlobalVars[i]->name, Qt::CaseInsensitive ) ) {
 			QString type;
 			switch( GlobalVars[i]->type )   {
 				case EVariableTypeList::eBool:
@@ -331,83 +353,36 @@ bool Scripting::ValidateCommandScript( bool _Runtime, QString _Script, FCommandS
 	QString lChar;
 	int lStringSize = lString.size();
 
-	for ( int c = 0; c < lStringSize; c++  ) {
+	for( int c = 0; c < lStringSize; c++  ) {
 
 	}
 
-	switch ( lChar ) {
+	switch( lChar ) {
 		case "":
 			break;
 	}
 }
 
-bool Scripting::ScrFuncPing( QString& _Return ) {
-	_Return = "Pong";
-	return true;
-}
-
-bool Scripting::ScrFuncChest( QString& _Return, FUserStruct* _User ) {
-	if ( Common::MGChestEnabled ) {
-		if ( Common::MGChestToPick ) {
-			Common::MGChestToPick = false;
-			_User->pointsNum = _User->pointsNum + Common::MGChestPoints;
-			_User->currencyNum = _User->currencyNum + Common::MGChestCurrency;
-			_User->ticketsNum = _User->ticketsNum + Common::MGChestTickets;
-		} else {
-
-		}
-	}
-}
-
-bool Scripting::ScrFuncJoinRPG( QString& _Return, FUserStruct* _User ) {
-	if ( RPG::bPlayersCanJoin ) {
-
-	}
-}
-
-bool Scripting::ScrFuncLeaveRPG( QString& _Return, FUserStruct* _User ) {
-
-}
-
-bool Scripting::ScrFuncDice( QString& _Return, QString _Sides ) {
-	int sides = 0;
-	bool result = false;
-	sides = _Sides.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	_Return = QString::number(SharedLib::RandIntInRange(0, sides));
-	return result;
-}
-
-bool Scripting::ScrFuncRandBool( QString& _Return ) {
-	_Return = (QString::number(SharedLib::RandIntInRange(0, 1)) == 1 ? "True" : "False");
-	return true;
-}
-
-bool Scripting::ScrFuncRandNum( QString& _Return ) {
-	_Return = QString::number(SharedLib::RandIntInRange(0, 9999));
-	return true;
-}
-
 bool Scripting::ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, const QString _Input, const EVariableTypeList _Type ) {
-	if ( _Input == "" || _Input == " " || _Input.isNull() || _Input.isEmpty() ) {
+	if( _Input == "" || _Input == " " || _Input.isNull() || _Input.isEmpty() ) {
 		return false;
 	}
 	bool vconv = false;
 	FScrVarContainerStruct var;
-	switch ( _Type ) {
+	switch( _Type ) {
 		case EVariableTypeList::eBool:
 		{
 			bool val = false;
-			if ( _Input.contains( "True", Qt::CaseInsensitive ) || _Input.contains( "1", Qt::CaseInsensitive ) ) {
+			if( _Input.contains( "True", Qt::CaseInsensitive ) || _Input.contains( "1", Qt::CaseInsensitive ) ) {
 				val = true;
 				vconv = true;
-			} else if ( _Input.contains( "False", Qt::CaseInsensitive ) || _Input.contains( "0", Qt::CaseInsensitive ) ) {
+			} else if( _Input.contains( "False", Qt::CaseInsensitive ) || _Input.contains( "0", Qt::CaseInsensitive ) ) {
 				val = false;
 				vconv = true;
 			} else {
 				vconv = false;
 			}
-			if ( vconv ) {
+			if( vconv ) {
 				var.varBool = val;
 				var.varType = EVariableTypeList::eBool;
 			} else {
@@ -419,7 +394,7 @@ bool Scripting::ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, cons
 		case EVariableTypeList::eFloat:
 		{
 			float val = _Input.toFloat(&vconv);
-			if ( vconv ) {
+			if( vconv ) {
 				var.varFloat = val;
 				var.varType = EVariableTypeList::eFloat;
 			} else {
@@ -431,7 +406,7 @@ bool Scripting::ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, cons
 		case EVariableTypeList::eInt:
 		{
 			int val = _Input.toInt(&vconv);
-			if ( vconv ) {
+			if( vconv ) {
 				var.varInt = val;
 				var.varType = EVariableTypeList::eInt;
 			} else {
@@ -444,7 +419,7 @@ bool Scripting::ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, cons
 		{
 			vconv = true;
 			QString val = _Input;
-			if ( vconv ) {
+			if( vconv ) {
 				var.varString = val;
 				var.varType = EVariableTypeList::eString;
 			} else {
@@ -454,7 +429,7 @@ bool Scripting::ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, cons
 		}
 			break;
 	}
-	if ( vconv ) {
+	if( vconv ) {
 		_VarContainer = var;
 		return true;
 	} else {
@@ -465,409 +440,503 @@ bool Scripting::ValidateScrVarInput( FScrVarContainerStruct& _VarContainer, cons
 
 bool Scripting::ValidateScrVarArrayInputs( QList<FScrVarContainerStruct>& _VarContainer, QList<QString> _Inputs, QList<EVariableTypeList> _Types ) {
 	int iSize = _Inputs.size(), tSize = _Types.size();
-	if ( iSize != tSize ) {
+	if( iSize != tSize ) {
 		// Invalid Size
 		qDebug() << "Invalid Size on Function inputs";
 		return false;
 	}
-	for ( int i = 0; i < iSize; i++ ) {
+	for( int i = 0; i < iSize; i++ ) {
 		FScrVarContainerStruct var;
-		if ( ValidateScrVarInput( var, _Inputs[i], _Types[i] ) ) {
+		if( ValidateScrVarInput( var, _Inputs[i], _Types[i] ) ) {
 			_VarContainer << var;
 		} else {
 			return false;
 		}
 	}
-
 }
 
-bool Scripting::ScrFuncRandNumRange( QString& _Return, QString _NumA, QString _NumB ) {
-	int numA = 0, numB = 0;
-	bool result = false;
-	numA = _NumA.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	numB = _NumB.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	_Return = QString::number(SharedLib::RandIntInRange(numA, numB));
-	return result;
+bool Scripting::ScrResolveUserByName( const QString _Name, FUserStruct* _User ) {
+	FScrVarContainerStruct var;
+	if( ValidateScrVarInput( var, _Name, EVariableTypeList::eString ) ) {
+		int listSize = Users::UsersList.size();
+		for( int i = 0; i < listSize; i++ ) {
+			if ( var.varString == Users::UsersList[i]->name ) {
+				_User = Users::UsersList[i];
+				return true;
+			}
+		}
+		qDebug() << "Missing user";
+		return false;
+	} else {
+		qDebug() << "Invalid name";
+		return false;
+	}
 }
 
-bool Scripting::ScrFuncAddNum( QString& _Return, QString _NumA, QString _NumB ) {
-	int numA = 0, numB = 0;
-	bool result = false;
-	numA = _NumA.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	numB = _NumB.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-
-	_Return = QString::number(numA + numB);
-	return result;
+bool Scripting::ScrResolveGroupByName( const QString _Name, FUserGroupStruct* _Group ) {
+	FScrVarContainerStruct var;
+	if( ValidateScrVarInput( var, _Name, EVariableTypeList::eString ) ) {
+		int listSize = Users::UserGroupsStruct.size();
+		for( int i = 0; i < listSize; i++ ) {
+			if ( var.varString == Users::UserGroupsStruct[i]->name ) {
+				_Group = Users::UserGroupsStruct[i];
+				return true;
+			}
+		}
+		qDebug() << "Missing user";
+		return false;
+	} else {
+		qDebug() << "Invalid name";
+		return false;
+	}
 }
 
-bool Scripting::ScrFuncSubNum( QString& _Return, QString _NumA, QString _NumB ) {
-	int numA = 0, numB = 0;
-	bool result = false;
-	numA = _NumA.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	numB = _NumB.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-
-	_Return = QString::number(numA - numB);
-	return result;
+bool Scripting::ScrResolveRankByName( const QString _Name, FUserRankStruct* _Rank ) {
+	FScrVarContainerStruct var;
+	if( ValidateScrVarInput( var, _Name, EVariableTypeList::eString ) ) {
+		int listSize = Users::UserRanksStruct.size();
+		for( int i = 0; i < listSize; i++ ) {
+			if ( var.varString == Users::UserRanksStruct[i]->name ) {
+				_Rank = Users::UserRanksStruct[i];
+				return true;
+			}
+		}
+		qDebug() << "Missing user";
+		return false;
+	} else {
+		qDebug() << "Invalid name";
+		return false;
+	}
 }
 
-bool Scripting::ScrFuncMulNum( QString& _Return, QString _NumA, QString _NumB ) {
-	int numA = 0, numB = 0;
-	bool result = false;
-	numA = _NumA.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	numB = _NumB.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-
-	_Return = QString::number(numA * numB);
-	return result;
+bool Scripting::ScrResolveModuleByName( const QString _Name, FCommonModuleStruct* _Module ) {
+	FScrVarContainerStruct var;
+	if( ValidateScrVarInput( var, _Name, EVariableTypeList::eString ) ) {
+		int listSize = Common::Modules.size();
+		for( int i = 0; i < listSize; i++ ) {
+			if ( var.varString == Common::Modules[i]->name ) {
+				_Module = Common::Modules[i];
+				return true;
+			}
+		}
+		qDebug() << "Missing user";
+		return false;
+	} else {
+		qDebug() << "Invalid name";
+		return false;
+	}
 }
 
-bool Scripting::ScrFuncDivNum( QString& _Return, QString _NumA, QString _NumB ) {
-	int numA = 0, numB = 0;
-	bool result = false;
-	numA = _NumA.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	numB = _NumB.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-
-	_Return = QString::number(numA / numB);
-	return result;
+bool Scripting::ScrResolveEventByName( const QString _Name, FCommonEventStruct* _Event ) {
+	FScrVarContainerStruct var;
+	if( ValidateScrVarInput( var, _Name, EVariableTypeList::eString ) ) {
+		int listSize = Common::Events.size();
+		for( int i = 0; i < listSize; i++ ) {
+			if ( var.varString == Common::Events[i]->name ) {
+				_Event = Common::Events[i];
+				return true;
+			}
+		}
+		qDebug() << "Missing user";
+		return false;
+	} else {
+		qDebug() << "Invalid name";
+		return false;
+	}
 }
 
-bool Scripting::ScrFuncModNum( QString& _Return, QString _NumA, QString _NumB ) {
-	int numA = 0, numB = 0;
-	bool result = false;
-	numA = _NumA.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-	numB = _NumB.toInt(&result);
-	if( !result ) { _Return = ""; return false; }
-
-	_Return = QString::number(numA % numB);
-	return result;
-}
-
-
-bool ScrResolveUserByName( const QString _Name, FUserStruct* _User ) {
-	return false;
-}
-
-bool ScrResolveGroupByName( const QString _Name, FUserGroupStruct* _Group ) {
-	return false;
-}
-
-bool ScrResolveRankByName( const QString _Name, FUserRankStruct* _Rank ) {
-	return false;
-}
-
-bool ScrResolveModuleByName( const QString _Name, FCommonModuleStruct* _Event ) {
-	return false;
-}
-
-bool ScrResolveEventByName( const QString _Name, FCommonEventStruct* _Event ) {
-	return false;
-}
-
-
-//
-// SCR TOKENS
-//
 
 // Token Helpers
-QString ScrTkGetChannelName() {
-	return false;
+QString Scripting::ScrTkGetChannelName() {
+	return Common::TwitchChannelName;
 }
 
-QString ScrTkGetPointsName() {
-	return false;
+QString Scripting::ScrTkGetMasterName() {
+	return Common::TwitchOwnerUsername;
 }
 
-QString ScrTkGetCurrencyName() {
-	return false;
+QString Scripting::ScrTkGetOwnerName() {
+	return Common::TwitchOwnerUsername;
 }
 
-QString ScrTkGetTicketsName() {
-	return false;
+QString Scripting::ScrTkGetBotName() {
+	return Common::TwitchBotUsername;
 }
 
-QString ScrTkGetKeysName() {
-	return false;
+QString Scripting::ScrTkGetPointsName() {
+	return Common::PointsCustomName;
+}
+
+QString Scripting::ScrTkGetCurrencyName() {
+	return Common::CurrencyCustomName;
 }
 
+QString Scripting::ScrTkGetTicketsName() {
+	return Common::TicketsCustomName;
+}
 
-bool ScrTkGetUserTarget( QString _Name, FUserStruct& _Target ) {
-	return false;
+QString Scripting::ScrTkGetKeysName() {
+	return Common::KeysCustomName;
 }
 
 
-QString ScrTkGetUserName( FUserStruct* _User ) {
-	return false;
+bool Scripting::ScrTkGetUserTarget( QString _Name, FUserStruct* _Target ) {
+	return ScrResolveUserByName( _Name, _Target );
 }
 
-QString ScrTkGetUserPoints( FUserStruct* _User ) {
-	return false;
+
+QString Scripting::ScrTkGetUserName( FUserStruct* _User ) {
+	return _User->name;
 }
 
-QString ScrTkGetUserCurrency( FUserStruct* _User ) {
-	return false;
+QString Scripting::ScrTkGetUserPoints( FUserStruct* _User ) {
+	return QString::number(_User->pointsNum);
 }
 
-QString ScrTkGetUserTickets( FUserStruct* _User ) {
-	return false;
+QString Scripting::ScrTkGetUserCurrency( FUserStruct* _User ) {
+	return QString::number(_User->currencyNum);
 }
 
-QString ScrTkGetUserKeys( FUserStruct* _User ) {
-	return false;
+QString Scripting::ScrTkGetUserTickets( FUserStruct* _User ) {
+	return QString::number(_User->ticketsNum);
 }
 
+QString Scripting::ScrTkGetUserKeys( FUserStruct* _User ) {
+	return QString::number(_User->keysNum);
+}
 
 
-bool ScrFuncPing( QString& _Return ) {
-	return false;
+bool Scripting::ScrFuncPing( QString& _Return ) {
+	_Return = "Pong";
+	return true;
 }
 
-bool ScrFuncSoundPlay( QString& _Return, const QString _File ) {
+bool Scripting::ScrFuncSoundPlay( QString& _Return, const QString _File ) {
 	return false;
 }
 
-bool ScrFuncNL( QString& _Return ) {
-	return false;
+bool Scripting::ScrFuncNL( QString& _Return ) {
+	_Return = "/n";
+	return true;
 }
 
 
-bool ScrFuncMBoolRand( QString& _Return ) {
-	return false;
+bool Scripting::ScrFuncMBoolRand( QString& _Return ) {
+	_Return = (QString::number(SharedLib::RandIntInRange(0, 1)) == 1 ? "True" : "False");
+	return true;
 }
 
-bool ScrFuncMNumRand( QString& _Return ) {
-	return false;
+bool Scripting::ScrFuncMNumRand( QString& _Return ) {
+	_Return = QString::number(SharedLib::RandIntInRange(0, 9999));
+	return true;
 }
 
-bool ScrFuncMNumRandRange( QString& _Return, const QString _Min, const QString _Max ) {
-	return false;
+bool Scripting::ScrFuncMNumRandRange( QString& _Return, const int _Min, const int _Max ) {
+	if ( _Min > _Max ) {
+		_Return = QString::number(SharedLib::RandIntInRange(_Max, _Min));
+	} else {
+		_Return = QString::number(SharedLib::RandIntInRange(_Min, _Max));
+	}
+	return true;
 }
 
-bool ScrFuncMNumAdd( QString& _Return, const QString _NumA, const QString _NumB ) {
-	return false;
+bool Scripting::ScrFuncMNumAdd( QString& _Return, const int _NumA, const int _NumB ) {
+	_Return = QString::number(_NumA + _NumB);
+	return true;
 }
 
-bool ScrFuncMNumSub( QString& _Return, const QString _NumA, const QString _NumB ) {
-	return false;
+bool Scripting::ScrFuncMNumSub( QString& _Return, const int _NumA, const int _NumB ) {
+	_Return = QString::number(_NumA - _NumB);
+	return true;
 }
 
-bool ScrFuncMNumMul( QString& _Return, const QString _NumA, const QString _NumB ) {
-	return false;
+bool Scripting::ScrFuncMNumMul( QString& _Return, const int _NumA, const int _NumB ) {
+	_Return = QString::number(_NumA * _NumB);
+	return true;
 }
 
-bool ScrFuncMNumDiv( QString& _Return, const QString _NumA, const QString _NumB ) {
-	return false;
+bool Scripting::ScrFuncMNumDiv( QString& _Return, const int _NumA, const int _NumB ) {
+	_Return = QString::number(_NumA / _NumB);
+	return true;
 }
 
-bool ScrFuncMNumMod( QString& _Return, const QString _NumA, const QString _NumB ) {
-	return false;
+bool Scripting::ScrFuncMNumMod( QString& _Return, const int _NumA, const int _NumB ) {
+	_Return = QString::number(_NumA % _NumB);
+	return true;
 }
 
 
-bool ScrFuncIOReadFileLine( QString& _Return, const QString _File, const int _Line ) {
+bool Scripting::ScrFuncIOReadFileLine( QString& _Return, const QString _File, const int _Line ) {
 	return false;
 }
 
-bool ScrFuncIOReadRandLine( QString& _Return, const QString _File ) {
+bool Scripting::ScrFuncIOReadRandLine( QString& _Return, const QString _File ) {
 	return false;
 }
 
-bool ScrFuncIOSaveFileLine( const QString _Text, const QString _File, const int _Line ) {
+bool Scripting::ScrFuncIOSaveFileLine( const QString _Text, const QString _File, const int _Line ) {
 	return false;
 }
 
-bool ScrFuncIOSaveFileLastLine( const QString _Text, const QString _File ) {
+bool Scripting::ScrFuncIOSaveFileLastLine( const QString _Text, const QString _File ) {
 	return false;
 }
 
-bool ScrFuncIOSaveFileOverwrite( const QString _Text, const QString _File ) {
+bool Scripting::ScrFuncIOSaveFileOverwrite( const QString _Text, const QString _File ) {
 	return false;
 }
 
-bool ScrFuncIOReadWeb( QString& _Return, const QString _URL ) {
+bool Scripting::ScrFuncIOReadWeb( QString& _Return, const QString _URL ) {
 	return false;
 }
 
-bool ScrFuncIOReadWebLine( QString& _Return, const QString _URL, const int _Line ) {
+bool Scripting::ScrFuncIOReadWebLine( QString& _Return, const QString _URL, const int _Line ) {
 	return false;
 }
 
 
 
-bool ScrFuncUserGroupGet( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncUserGroupGet( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
 
-bool ScrFuncUserGroupAdd( QString& _Return, FUserStruct* _User, FUserGroupStruct* _Group ) {
+bool Scripting::ScrFuncUserGroupAdd( QString& _Return, FUserStruct* _User, FUserGroupStruct* _Group ) {
 	return false;
 }
 
-bool ScrFuncUserGroupRem( QString& _Return, FUserStruct* _User, FUserGroupStruct* _Group ) {
+bool Scripting::ScrFuncUserGroupRem( QString& _Return, FUserStruct* _User, FUserGroupStruct* _Group ) {
 	return false;
 }
 
-bool ScrFuncUserRankGet( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncUserRankGet( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
 
-bool ScrFuncUserRankSet( QString& _Return, FUserStruct* _User, FUserRankStruct* _Rank ) {
+bool Scripting::ScrFuncUserRankSet( QString& _Return, FUserStruct* _User, FUserRankStruct* _Rank ) {
 	return false;
 }
 
 
 
-bool ScrFuncEventStart( QString& _Return, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventStart( QString& _Return, FCommonEventStruct* _Event ) {
 	return false;
 }
 
-bool ScrFuncEventEnd( QString& _Return, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventEnd( QString& _Return, FCommonEventStruct* _Event ) {
 	return false;
 }
 
-bool ScrFuncEventOpen( QString& _Return, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventOpen( QString& _Return, FCommonEventStruct* _Event ) {
 	return false;
 }
 
-bool ScrFuncEventClose( QString& _Return, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventClose( QString& _Return, FCommonEventStruct* _Event ) {
 	return false;
 }
 
-bool ScrFuncEventUserJoin( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventUserJoin( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
 	return false;
 }
 
-bool ScrFuncEventUserLeave( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventUserLeave( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
 	return false;
 }
 
-bool ScrFuncEventUserSet( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventUserSet( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
 	return false;
 }
 
-bool ScrFuncEventUserRem( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
+bool Scripting::ScrFuncEventUserRem( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event ) {
 	return false;
 }
 
 
-
-bool ScrFuncUserPointsGet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserPointsGet( QString& _Return, FUserStruct* _User, const bool _Total ) {
+	if( _Total ) {
+		_Return = QString::number( _User->pointsNum + _User->pointsSpentNum );
+	} else {
+		_Return = QString::number( _User->pointsNum );
+	}
+	return true;
 }
 
-bool ScrFuncUserPointsAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserPointsAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->pointsNum = qBound( 0, _User->pointsNum + amount, 999999 );
+	return true;
 }
 
-bool ScrFuncUserPointsSub( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserPointsSub( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->pointsNum = qBound( 0, _User->pointsNum - amount, 999999 );
+	return true;
 }
 
-bool ScrFuncUserPointsSet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserPointsSet( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->pointsNum = amount;
+	return true;
 }
 
-bool ScrFuncUserPointsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserPointsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	if ( _UserSender->pointsNum >= amount ) {
+		_UserSender->pointsNum = qBound( 0, _UserSender->pointsNum - amount, 999999 );
+		_User->pointsNum = qBound( 0, _User->pointsNum - amount, 999999 );
+	}
+	return true;
 }
 
-bool ScrFuncUserCurrencyGet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserCurrencyGet( QString& _Return, FUserStruct* _User, const bool _Total ) {
+	if( _Total ) {
+		_Return = QString::number( _User->currencyNum + _User->currencySpentNum );
+	} else {
+		_Return = QString::number( _User->currencyNum );
+	}
+	return true;
 }
 
-bool ScrFuncUserCurrencyAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserCurrencyAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->currencyNum = qBound( 0, _User->currencyNum + amount, 999999 );
+	return true;
 }
 
-bool ScrFuncUserCurrencySub( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserCurrencySub( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->currencyNum = qBound( 0, _User->currencyNum - amount, 999999 );
+	return true;
 }
 
-bool ScrFuncUserCurrencySet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserCurrencySet( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->currencyNum = amount;
+	return true;
 }
 
-bool ScrFuncUserCurrencyGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserCurrencyGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	if ( _UserSender->currencyNum >= amount ) {
+		_UserSender->currencyNum = qBound( 0, _UserSender->currencyNum - amount, 999999 );
+		_User->currencyNum = qBound( 0, _User->currencyNum - amount, 999999 );
+	}
+	return true;
 }
 
-bool ScrFuncUserTicketsGet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserTicketsGet( QString& _Return, FUserStruct* _User, const bool _Total ) {
+	if( _Total ) {
+		_Return = QString::number( _User->ticketsNum + _User->ticketsSpentNum );
+	} else {
+		_Return = QString::number( _User->ticketsNum );
+	}
+	return true;
 }
 
-bool ScrFuncUserTicketsAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserTicketsAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->ticketsNum = qBound(0, _User->ticketsNum + amount, 999999);
+	return true;
 }
 
-bool ScrFuncUserTicketsSub( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserTicketsSub( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->ticketsNum = qBound(0, _User->ticketsNum - amount, 999999);
+	return true;
 }
 
-bool ScrFuncUserTicketsSet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserTicketsSet( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->ticketsNum = amount;
+	return true;
 }
 
-bool ScrFuncUserTicketsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserTicketsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	if ( _UserSender->ticketsNum >= amount ) {
+		_UserSender->ticketsNum = qBound( 0, _UserSender->ticketsNum - amount, 999999 );
+		_User->ticketsNum = qBound( 0, _User->ticketsNum - amount, 999999 );
+	}
+	return true;
 }
 
-bool ScrFuncUserKeysGet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserKeysGet( QString& _Return, FUserStruct* _User, const bool _Total ) {
+	if( _Total ) {
+		_Return = QString::number( _User->keysNum + _User->keysSpentNum );
+	} else {
+		_Return = QString::number( _User->keysNum );
+	}
+	return true;
 }
 
-bool ScrFuncUserKeysAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserKeysAdd( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->keysNum = qBound(0, _User->keysNum + amount, 999999);
+	return true;
 }
 
-bool ScrFuncUserKeysSub( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserKeysSub( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->keysNum = qBound(0, _User->keysNum - amount, 999999);
+	return true;
 }
 
-bool ScrFuncUserKeysSet( QString& _Return, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserKeysSet( QString& _Return, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	_User->keysNum = amount;
+	return true;
 }
 
-bool ScrFuncUserKeysGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
-	return false;
+bool Scripting::ScrFuncUserKeysGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount ) {
+	int amount = qBound( 0, _Amount, 999999 );
+	if ( _UserSender->keysNum >= amount ) {
+		_UserSender->keysNum = qBound( 0, _UserSender->keysNum - amount, 999999 );
+		_User->keysNum = qBound( 0, _User->keysNum - amount, 999999 );
+	}
+	return true;
 }
 
 
-bool ScrFuncMGChest( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncMGChest( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
+
+bool Scripting::ScrFuncMGChestSpawn( QString& _Return, FUserStruct* _User ) {
+	if( MiniGames::ChestEnabled ) {
+		if( MiniGames::ChestToPick ) {
+			MiniGames::ChestToPick = false;
+			_User->pointsNum = _User->pointsNum + MiniGames::ChestPoints;
+			_User->currencyNum = _User->currencyNum + MiniGames::ChestCurrency;
+			_User->ticketsNum = _User->ticketsNum + MiniGames::ChestTickets;
+			_User->keysNum = _User->keysNum + MiniGames::ChestKeys;
+		} else {
 
-bool ScrFuncMGChestSpawn( QString& _Return, FUserStruct* _User ) {
+		}
+	}
+
 	return false;
 }
 
-bool ScrFuncMGDiceRoll( QString& _Return, FUserStruct* _User, const int _Sides ) {
-	return false;
+bool Scripting::ScrFuncMGDiceRoll( QString& _Return, FUserStruct* _User, const int _Sides ) {
+	_Return = QString::number(SharedLib::RandIntInRange(0, _Sides));
+	return true;
 }
 
-bool ScrFuncMGQAQuestion( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncMGQAQuestion( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
 
-bool ScrFuncMGQAAnswer( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncMGQAAnswer( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
 
-bool ScrFuncMGPianoPlay( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncMGPianoPlay( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
 
-bool ScrFuncRPGJoin( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncRPGJoin( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
 
-bool ScrFuncRPGLeave( QString& _Return, FUserStruct* _User ) {
+bool Scripting::ScrFuncRPGLeave( QString& _Return, FUserStruct* _User ) {
 	return false;
 }
