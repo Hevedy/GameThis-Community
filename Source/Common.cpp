@@ -39,8 +39,68 @@ SOFTWARE.
 
 #include "Common.h"
 
-QList<FCommonModuleStruct*> Common::Modules;
-QList<FCommonEventStruct*> Common::Events;
+// Social global
+QString Common::OwnerName;
+QString Common::BotName;
+
+// Twitch
+QString Common::TwitchChannelName;
+bool Common::TwitchUseMaster;
+bool Common::TwitchUseBot;
+QString Common::TwitchOwnerUsername;
+QString Common::TwitchBotUsername;
+QString Common::TwitchUsername;
+QString Common::TwitchOwnerToken;
+QString Common::TwitchBotToken;
+QString Common::TwitchToken;
+QList<QString> Common::TwitchBotHelpers;
+
+bool Common::TwitchEnabled;
+// Common
+bool Common::TwitchExecuted;
+bool Common::TwitchConnected;
+bool Common::TwitchOnline;
+// Master
+bool Common::TwitchMExecuted;
+bool Common::TwitchMConnected;
+bool Common::TwitchMOnline;
+
+// Dicord
+QString Common::DiscordChannelName;
+bool Common::DiscordUseMaster;
+bool Common::DiscordUseBot;
+QString Common::DiscordOwnerUsername;
+QString Common::DiscordBotUsername;
+QString Common::DiscordUsername;
+QString Common::DiscordOwnerToken;
+QString Common::DiscordBotToken;
+QString Common::DiscordToken;
+QList<QString> Common::DiscordBotHelpers;
+
+bool Common::DiscordEnabled;
+// Common
+bool Common::DiscordExecuted;
+bool Common::DiscordConnected;
+bool Common::DiscordOnline;
+// Master
+bool Common::DiscordMExecuted;
+bool Common::DiscordMConnected;
+bool Common::DiscordMOnline;
+
+// Steam
+bool Common::SteamEnabled;
+bool Common::SteamExecuted;
+bool Common::SteamConnected;
+bool Common::SteamOnline;
+
+// Global
+QString Common::PointsCustomName;
+QString Common::CurrencyCustomName;
+QString Common::TicketsCustomName;
+QString Common::KeysCustomName;
+
+QList<FCommonModuleStruct*> Common::ModulesList;
+QList<FCommonEventStruct*> Common::EventsList;
 
 bool Common::ClearModule( FCommonModuleStruct* _Module ) {
 	delete _Module;
@@ -96,10 +156,10 @@ bool Common::LoadScriptModules( QJsonObject _File ) {
 			modules << module;
 		}
 	}
-	ClearModulesArray(Modules);
+	ClearModulesArray(ModulesList);
 	//qDeleteAll(Modules);
 	//Modules.clear();
-	Modules = modules;
+	ModulesList = modules;
 	// Because the errors already has been pulled
 	return true;
 }
@@ -117,10 +177,10 @@ bool Common::LoadScriptEvents( QJsonObject _File ) {
 			events << event;
 		}
 	}
-	ClearEventsArray(Events);
+	ClearEventsArray(EventsList);
 	//qDeleteAll(Modules);
 	//Modules.clear();
-	Events = events;
+	EventsList = events;
 	// Because the errors already has been pulled
 	return true;
 }

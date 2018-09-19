@@ -42,6 +42,9 @@ SOFTWARE.
 
 #include <QObject>
 #include <QtMath>
+#include "gmMachine.h"
+#include "gmCall.h"
+#include "gmThread.h"
 #include "GlobalFunctions.h"
 #include "Common.h"
 #include "Commands.h"
@@ -64,9 +67,21 @@ public:
 	static void init();
 	
 
-	static QList<FScrGlobalVarStruct*> GlobalVars;
-	static QList<FScrTokenStruct*> Tokens;
-	static QList<FScrFunctionStruct*> Functions;
+	static QList<FScrGlobalVarStruct*> GlobalVarsList;
+	static QList<FScrTokenStruct*> TokensList;
+	static QList<FScrTokenStaticStruct> TokensStaticList;
+	static QList<FScrFunctionStruct*> FunctionsList;
+
+	static QString GVarPrefix;
+	static QString GVarSuffix;
+	static QString TokenPrefix;
+	static QString TokenSuffix;
+	static QString FuncPrefix;
+	static QString FuncSuffix;
+
+	static FUserStruct* CUser;
+	static FUserStruct* CUserTarget;
+	static FCommandStruct* CCommand;
 
     static bool ClearGlobalVar( FScrGlobalVarStruct* _Var );
     static bool ClearGlobalVarsArray( QList<FScrGlobalVarStruct*>& _VarsArray );
@@ -116,75 +131,77 @@ public:
 	//
 
 	// Logic tools
+	//static bool GM_CDECL ScrFuncPingT(gmThread* a_thread);
 	static bool ScrFuncPing( QString& _Return );
-	static bool ScrFuncSoundPlay( QString& _Return, const QString _File );
+	static bool ScrFuncSoundPlay( bool& _Return, const QString _File );
 	static bool ScrFuncNL( QString& _Return );
 	// Math
-	static bool ScrFuncMBoolRand( QString& _Return );
-	static bool ScrFuncMNumRand( QString& _Return );
-	static bool ScrFuncMNumRandRange( QString& _Return,  const int _Min, const int _Max );
-	static bool ScrFuncMNumAdd( QString& _Return, const int _NumA, const int _NumB );
-	static bool ScrFuncMNumSub( QString& _Return, const int _NumA, const int _NumB );
-	static bool ScrFuncMNumMul( QString& _Return, const int _NumA, const int _NumB );
-	static bool ScrFuncMNumDiv( QString& _Return, const int _NumA, const int _NumB );
-	static bool ScrFuncMNumMod( QString& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMBoolRand( bool& _Return );
+	static bool ScrFuncMNumRand( int& _Return );
+	static bool ScrFuncMNumRandRange( int& _Return,  const int _Min, const int _Max );
+	static bool ScrFuncMNumAdd( int& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumSub( int& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumMul( int& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumDiv( int& _Return, const int _NumA, const int _NumB );
+	static bool ScrFuncMNumMod( int& _Return, const int _NumA, const int _NumB );
 	// IO
 	static bool ScrFuncIOReadFileLine( QString& _Return, const QString _File, const int _Line );
 	static bool ScrFuncIOReadRandLine( QString& _Return, const QString _File );
-	static bool ScrFuncIOSaveFileLine( const QString _Text, const QString _File, const int _Line );
-	static bool ScrFuncIOSaveFileLastLine( const QString _Text, const QString _File );
-	static bool ScrFuncIOSaveFileOverwrite( const QString _Text, const QString _File );
+	static bool ScrFuncIOSaveFileLine( bool& _Return, const QString _Text, const QString _File, const int _Line );
+	static bool ScrFuncIOSaveFileLastLine( bool& _Return, const QString _Text, const QString _File );
+	static bool ScrFuncIOSaveFileOverwrite( bool& _Return, const QString _Text, const QString _File );
 	static bool ScrFuncIOReadWeb( QString& _Return, const QString _URL );
 	static bool ScrFuncIOReadWebLine( QString& _Return, const QString _URL, const int _Line );
 	// Users manager
 	static bool ScrFuncUserGroupGet( QString& _Return, FUserStruct* _User );
-	static bool ScrFuncUserGroupAdd( QString& _Return, FUserStruct* _User, FUserGroupStruct* _Group );
-	static bool ScrFuncUserGroupRem( QString& _Return, FUserStruct* _User, FUserGroupStruct* _Group );
+	static bool ScrFuncUserGroupAdd( bool& _Return, FUserStruct* _User, FUserGroupStruct* _Group );
+	static bool ScrFuncUserGroupRem( bool& _Return, FUserStruct* _User, FUserGroupStruct* _Group );
 	static bool ScrFuncUserRankGet( QString& _Return, FUserStruct* _User );
-	static bool ScrFuncUserRankSet( QString& _Return, FUserStruct* _User, FUserRankStruct* _Rank );
+	static bool ScrFuncUserRankSet( bool& _Return, FUserStruct* _User, FUserRankStruct* _Rank );
 	// Events
-	static bool ScrFuncEventStart( QString& _Return, FCommonEventStruct* _Event );
-	static bool ScrFuncEventEnd( QString& _Return, FCommonEventStruct* _Event );
-	static bool ScrFuncEventOpen( QString& _Return, FCommonEventStruct* _Event );
-	static bool ScrFuncEventClose( QString& _Return, FCommonEventStruct* _Event );
-	static bool ScrFuncEventUserJoin( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
-	static bool ScrFuncEventUserLeave( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
-	static bool ScrFuncEventUserSet( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
-	static bool ScrFuncEventUserRem( QString& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
+	static bool ScrFuncEventStart( bool& _Return, FCommonEventStruct* _Event );
+	static bool ScrFuncEventEnd( bool& _Return, FCommonEventStruct* _Event );
+	static bool ScrFuncEventOpen(bool& _Return, FCommonEventStruct* _Event );
+	static bool ScrFuncEventClose( bool& _Return, FCommonEventStruct* _Event );
+	static bool ScrFuncEventUserJoin( bool& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
+	static bool ScrFuncEventUserLeave( bool& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
+	static bool ScrFuncEventUserSet( bool& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
+	static bool ScrFuncEventUserRem( bool& _Return, FUserStruct* _User, FCommonEventStruct* _Event );
 	// Users currency
-	static bool ScrFuncUserPointsGet( QString& _Return, FUserStruct* _User, const bool _Total );
-	static bool ScrFuncUserPointsAdd( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserPointsSub( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserPointsSet( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserPointsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserCurrencyGet( QString& _Return, FUserStruct* _User, const bool _Total );
-	static bool ScrFuncUserCurrencyAdd( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserCurrencySub( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserCurrencySet( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserCurrencyGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserTicketsGet( QString& _Return, FUserStruct* _User, const bool _Total );
-	static bool ScrFuncUserTicketsAdd( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserTicketsSub( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserTicketsSet( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserTicketsGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserKeysGet( QString& _Return, FUserStruct* _User, const bool _Total );
-	static bool ScrFuncUserKeysAdd( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserKeysSub( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserKeysSet( QString& _Return, FUserStruct* _User, const int _Amount );
-	static bool ScrFuncUserKeysGive( QString& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserPointsGet( int& _Return, FUserStruct* _User, const bool _Total );
+	static bool ScrFuncUserPointsAdd( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserPointsSub( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserPointsSet( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserPointsGive( bool& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserCurrencyGet( int& _Return, FUserStruct* _User, const bool _Total );
+	static bool ScrFuncUserCurrencyAdd( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserCurrencySub( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserCurrencySet( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserCurrencyGive( bool& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserTicketsGet( int& _Return, FUserStruct* _User, const bool _Total );
+	static bool ScrFuncUserTicketsAdd( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserTicketsSub( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserTicketsSet( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserTicketsGive( bool& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserKeysGet( int& _Return, FUserStruct* _User, const bool _Total );
+	static bool ScrFuncUserKeysAdd( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserKeysSub( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserKeysSet( bool& _Return, FUserStruct* _User, const int _Amount );
+	static bool ScrFuncUserKeysGive( bool& _Return, FUserStruct* _UserSender, FUserStruct* _User, const int _Amount );
 	// Minigames
-	static bool ScrFuncMGChest( QString& _Return, FUserStruct* _User );
-	static bool ScrFuncMGChestSpawn( QString& _Return, FUserStruct* _User );
-	static bool ScrFuncMGDiceRoll( QString& _Return, FUserStruct* _User, const int _Sides );
-	static bool ScrFuncMGQAQuestion( QString& _Return, FUserStruct* _User );
-	static bool ScrFuncMGQAAnswer( QString& _Return, FUserStruct* _User );
-	static bool ScrFuncMGPianoPlay( QString& _Return, FUserStruct* _User );
+	static bool ScrFuncMGChest( bool& _Return, FUserStruct* _User );
+	static bool ScrFuncMGChestSpawn( bool& _Return, FUserStruct* _User );
+	static bool ScrFuncMGDiceRoll( int& _Return, FUserStruct* _User, const int _Sides );
+	static bool ScrFuncMGQAQuestion( bool& _Return, FUserStruct* _User, const QString _Question );
+	static bool ScrFuncMGQAAnswer( bool& _Return, FUserStruct* _User, const QString _Answer );
+	static bool ScrFuncMGPianoPlay( bool& _Return, FUserStruct* _User, const QString _Keys );
 	// RPG Game
-	static bool ScrFuncRPGJoin( QString& _Return, FUserStruct* _User );
-	static bool ScrFuncRPGLeave( QString& _Return, FUserStruct* _User );
-
+	static bool ScrFuncRPGJoin( bool& _Return, FUserStruct* _User );
+	static bool ScrFuncRPGLeave( bool& _Return, FUserStruct* _User );
 
 private:
+	// Table of functions to register
+	//QList<gmFunctionEntry> regFuncList;
 	
 signals:
 

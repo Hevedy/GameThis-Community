@@ -138,6 +138,17 @@ struct FScrTokenStruct {
 	, type( _Type ) {}
 };
 
+struct FScrTokenStaticStruct {
+	// Name
+	QString name;
+	// Type
+	QString replace;
+
+	FScrTokenStaticStruct( QString _Name = "", QString _Replace = "" )
+	: name( _Name )
+	, replace( _Replace ) {}
+};
+
 // Function list for reference
 enum class EScrFunctionList {
 	eNone,
@@ -372,8 +383,8 @@ public:
     static QString KeysCustomName;
 
 
-    static QList<FCommonModuleStruct*> Modules;
-    static QList<FCommonEventStruct*> Events;
+    static QList<FCommonModuleStruct*> ModulesList;
+    static QList<FCommonEventStruct*> EventsList;
 
     static bool LoadCommonScripts();
     static bool LoadScriptModules( QJsonObject _File );
