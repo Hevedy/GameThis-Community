@@ -247,7 +247,7 @@ class Users : public QObject
 public:
     explicit Users(QObject *parent = nullptr);
 
-    void init();
+    static bool init();
 
     bool LoadPlayerProfile();
 

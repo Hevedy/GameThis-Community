@@ -45,8 +45,8 @@ QString Common::BotName;
 
 // Twitch
 QString Common::TwitchChannelName;
-bool Common::TwitchUseMaster;
-bool Common::TwitchUseBot;
+bool Common::TwitchUseMaster = false;
+bool Common::TwitchUseBot = false;
 QString Common::TwitchOwnerUsername;
 QString Common::TwitchBotUsername;
 QString Common::TwitchUsername;
@@ -55,20 +55,20 @@ QString Common::TwitchBotToken;
 QString Common::TwitchToken;
 QList<QString> Common::TwitchBotHelpers;
 
-bool Common::TwitchEnabled;
+bool Common::TwitchEnabled = false;
 // Common
-bool Common::TwitchExecuted;
-bool Common::TwitchConnected;
-bool Common::TwitchOnline;
+bool Common::TwitchExecuted = false;
+bool Common::TwitchConnected = false;
+bool Common::TwitchOnline = false;
 // Master
-bool Common::TwitchMExecuted;
-bool Common::TwitchMConnected;
-bool Common::TwitchMOnline;
+bool Common::TwitchMExecuted = false;
+bool Common::TwitchMConnected = false;
+bool Common::TwitchMOnline = false;
 
 // Dicord
 QString Common::DiscordChannelName;
-bool Common::DiscordUseMaster;
-bool Common::DiscordUseBot;
+bool Common::DiscordUseMaster = false;
+bool Common::DiscordUseBot = false;
 QString Common::DiscordOwnerUsername;
 QString Common::DiscordBotUsername;
 QString Common::DiscordUsername;
@@ -77,21 +77,21 @@ QString Common::DiscordBotToken;
 QString Common::DiscordToken;
 QList<QString> Common::DiscordBotHelpers;
 
-bool Common::DiscordEnabled;
+bool Common::DiscordEnabled = false;
 // Common
-bool Common::DiscordExecuted;
-bool Common::DiscordConnected;
-bool Common::DiscordOnline;
+bool Common::DiscordExecuted = false;
+bool Common::DiscordConnected = false;
+bool Common::DiscordOnline = false;
 // Master
-bool Common::DiscordMExecuted;
-bool Common::DiscordMConnected;
-bool Common::DiscordMOnline;
+bool Common::DiscordMExecuted = false;
+bool Common::DiscordMConnected = false;
+bool Common::DiscordMOnline = false;
 
 // Steam
-bool Common::SteamEnabled;
-bool Common::SteamExecuted;
-bool Common::SteamConnected;
-bool Common::SteamOnline;
+bool Common::SteamEnabled = false;
+bool Common::SteamExecuted = false;
+bool Common::SteamConnected = false;
+bool Common::SteamOnline = false;
 
 // Global
 QString Common::PointsCustomName;
@@ -131,13 +131,13 @@ Common::Common(QObject* _Parent) : QObject(_Parent)
 
 }
 
-void Common::init() {
-
+bool Common::init() {
+	if( !LoadCommonScripts() ) { return false; }
 }
 
 bool Common::LoadCommonScripts() {
 	QJsonObject fileJSON;
-	if ( GlobalFunctions::GetGameJSONObject( fileJSON , EGameFilesList::eCommon ) ) { return false; }
+	if ( !GlobalFunctions::GetGameJSONObject( fileJSON , EGameFilesList::eCommon ) ) { return false; }
 	if ( !LoadScriptModules( fileJSON ) ) { return false; }
 	if ( !LoadScriptEvents( fileJSON ) ) { return false; }
 	return true;

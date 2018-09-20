@@ -40,6 +40,7 @@ SOFTWARE.
 #include "Scripting.h"
 #include "MiniGames.h"
 
+bool Scripting::ProcessingCommand = false;
 
 QList<FScrGlobalVarStruct*> Scripting::GlobalVarsList;
 QList<FScrTokenStruct*> Scripting::TokensList;
@@ -74,9 +75,10 @@ Scripting::Scripting(QObject *parent) : QObject(parent)
 
 }
 
-void Scripting::init() {
+bool Scripting::init() {
 	AddCoreFunctions();
-	LoadScriptingScripts();
+	if( !LoadScriptingScripts() ) { return false; }
+	return true;
 
 }
 
@@ -271,7 +273,7 @@ void Scripting::AddCoreFunctions() {
 
 bool Scripting::LoadScriptingScripts() {
 	QJsonObject fileJSON;
-	if ( GlobalFunctions::GetGameJSONObject( fileJSON , EGameFilesList::eCommon ) ) { return false; }
+	if ( !GlobalFunctions::GetGameJSONObject( fileJSON , EGameFilesList::eCommon ) ) { return false; }
 	if ( !LoadScriptGlobalVars( fileJSON ) ) { return false; }
 	return true;
 }
@@ -1211,7 +1213,7 @@ bool Scripting::ScrFuncRPGLeave( bool& _Return, FUserStruct* _User ) {
 static int GM_CDECL SScrFuncPing( gmThread* a_thread ) {
 	QString returnVal = "";
 	if( Scripting::ScrFuncPing( returnVal ) ) {
-		a_thread->PushNewString( returnVal.toStdString().c_str(), returnVal.size() );
+		//a_thread->PushNewString( returnVal.toStdString().c_str(), returnVal.size() );
 		return GM_OK;
 	} else {
 		return GM_EXCEPTION;

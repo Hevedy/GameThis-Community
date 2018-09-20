@@ -320,7 +320,7 @@ class Common : public QObject
 public:
     explicit Common(QObject* _Parent = nullptr);
 
-    void init();
+    static bool init();
 
     // Social global
     static QString OwnerName;

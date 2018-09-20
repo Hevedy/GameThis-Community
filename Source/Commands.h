@@ -42,9 +42,15 @@ SOFTWARE.
 
 #include <QObject>
 #include "GlobalFunctions.h"
+#include "Common.h"
+#include "Users.h"
+
+#define COMMAND_NAMELENGTHMAX 200
+#define COMMANDINPUT_LENGTHMAX 250
 
 #define CommandSTR Commands
 #define CommandTypeSTR CommandsResultTypes
+
 
 /*
 enum class ECommandUserGroupList {
@@ -61,21 +67,21 @@ enum class ECommandUserGroupList {
 
 // Make input
 
+// Input queue raw
 struct FInputQueueStruct {
 public:
 
+	// Input user name
 	QString username;
-	// Need master
-	bool master;
 	// Text
 	QString text;
 
-	FInputQueueStruct( bool _Master = false, QString _Text = "" )
-	: master( _Master )
+	FInputQueueStruct( QString _Username = "", QString _Text = "" )
+	: username( _Username )
 	, text( _Text ) {}
 };
 
-// Outout for
+// Outout queue raw
 struct FOutputQueueStruct {
 public:
 
@@ -88,6 +94,17 @@ public:
 	: master( _Master )
 	, text( _Text ) {}
 };
+
+/*
+ *
+ * List of functions calls , include name and index from
+ * the actual setup and inputs
+ *
+ *
+ *
+ *
+ *
+ * */
 
 
 // Registered functions for commands
@@ -145,6 +162,11 @@ public:
 	// Inputs List
 	QList<FIndividualInputStruct> inputsFixed;
 
+	// Info of the linked command
+	int commandIndex;
+	QString returnValid;
+	QString returnInvalid;
+
 
 	FCommandInputStruct( QString _Command = "", QString _CommandFixed = "", QList<EVariableTypeList> _InputClasses = {},
 	int _CommandsLimit = 0, QList<FIndividualInputStruct> _Inputs = {}, QList<FIndividualInputStruct> _InputsFixed = {} )
@@ -182,6 +204,7 @@ public:
 	, structIndex( _StructIndex ) {}
 };
 
+/*
 struct FCommandDiceStruct {
 public:
 
@@ -239,63 +262,9 @@ public:
 	, groupsLocked( _GroupsLocked )
 	, skillCall( _SkillCall ) {}
 };
+*/
 
-struct FCommandStruct {
-public:
-
-	// Name ID
-	QString nameID;
-	// Name
-	QString name;
-	// Description
-	QString desc;
-	// Modules
-	QList<QString> modules;
-	// Command
-	QList<QString> commands;
-	// Inputs classes
-	QList<EVariableTypeList> inputsClasses;
-	// Input by Default
-	QList<QString> inputsDefault;
-	// Allow multi input
-	bool allowMultiCommand;
-	// Need master call
-	bool needsMaster;
-	// Groups of locked to (If equal null or "All" then all) Groups defined on Config
-	QList<QString> groupsLocked;
-	// Ranks locked
-	QList<QString> ranksLocked;
-	// Points Cost
-	QList<StringIntStruct> pointsCost;
-	// Currency Cost
-	QList<StringIntStruct> currencyCost;
-	// Tickets Cost
-	QList<StringIntStruct> ticketsCost;
-	// Reply Sentence
-	QList<QString> returns;
-
-	FCommandStruct( QString _NameID = "", QString _Name = "", QString _Desc = "", QList<QString> _Modules = {},
-	QList<QString> _Commands = {}, QList<EVariableTypeList> _InputsClasses = {}, QList<QString> _InputsDefault = {},
-	bool _AllowMultiCommand = false, bool _NeedsMaster = false, QList<QString> _GroupsLocked = {}, QList<QString> _RanksLocked = {},
-	QList<StringIntStruct> _PointsCost = {}, QList<StringIntStruct> _CurrencyCost = {}, QList<StringIntStruct> _TicketsCost = {},
-	QList<QString> _Returns = {} )
-	: nameID( _NameID )
-	, name( _Name )
-	, desc( _Desc )
-	, modules( _Modules )
-	, commands( _Commands )
-	, inputsClasses( _InputsClasses )
-	, inputsDefault( _InputsDefault )
-	, allowMultiCommand( _AllowMultiCommand )
-	, needsMaster( _NeedsMaster )
-	, groupsLocked( _GroupsLocked )
-	, ranksLocked( _RanksLocked )
-	, pointsCost( _PointsCost )
-	, currencyCost( _CurrencyCost )
-	, ticketsCost( _TicketsCost )
-	, returns( _Returns ) {}
-};
-
+// Command type that is called each x time
 struct FCommandAutoStruct {
 public:
 
@@ -319,6 +288,7 @@ public:
 	, text( _Text ) {}
 };
 
+// Command type called at some msg input
 struct FCommandTriggerStruct {
 public:
 
@@ -358,6 +328,68 @@ public:
 	, text( _Text ) {}
 };
 
+// Default command
+struct FCommandStruct {
+public:
+
+	// Name ID
+	QString nameID;
+	// Name
+	QString name;
+	// Description
+	QString desc;
+	// Modules
+	QList<QString> modules;
+	// Command
+	QList<QString> commands;
+	// Inputs classes
+	QList<EVariableTypeList> inputsClasses;
+	// Input by Default
+	QList<QString> inputsDefault;
+	// Allow multi input
+	bool allowMultiCommand;
+	// Need master call
+	bool needsMaster;
+	// Groups of locked to (If equal null or "All" then all) Groups defined on Config
+	QList<FUserGroupStruct*> groupsLocked;
+	// Ranks locked
+	QList<FUserRankStruct*> ranksLocked;
+	// Points Cost
+	QList<FUserGroupCostStruct> pointsCost;
+	// Currency Cost
+	QList<FUserGroupCostStruct> currencyCost;
+	// Tickets Cost
+	QList<FUserGroupCostStruct> ticketsCost;
+
+	QList<EScrFunctionList> functions;
+	QList<QString> functionArgs;
+
+	// Reply Sentence
+	QList<QString> returns;
+
+	FCommandStruct( QString _NameID = "", QString _Name = "", QString _Desc = "", QList<QString> _Modules = {},
+	QList<QString> _Commands = {}, QList<EVariableTypeList> _InputsClasses = {}, QList<QString> _InputsDefault = {},
+	bool _AllowMultiCommand = false, bool _NeedsMaster = false,
+	QList<FUserGroupStruct*> _GroupsLocked = {}, QList<FUserRankStruct*> _RanksLocked = {},
+	QList<FUserGroupCostStruct> _PointsCost = {}, QList<FUserGroupCostStruct> _CurrencyCost = {}, QList<FUserGroupCostStruct> _TicketsCost = {},
+	QList<QString> _Returns = {} )
+	: nameID( _NameID )
+	, name( _Name )
+	, desc( _Desc )
+	, modules( _Modules )
+	, commands( _Commands )
+	, inputsClasses( _InputsClasses )
+	, inputsDefault( _InputsDefault )
+	, allowMultiCommand( _AllowMultiCommand )
+	, needsMaster( _NeedsMaster )
+	, groupsLocked( _GroupsLocked )
+	, ranksLocked( _RanksLocked )
+	, pointsCost( _PointsCost )
+	, currencyCost( _CurrencyCost )
+	, ticketsCost( _TicketsCost )
+	, returns( _Returns ) {}
+};
+
 
 class Commands : public QObject
 {
@@ -366,7 +398,7 @@ class Commands : public QObject
 public:
 	explicit Commands(QObject *parent = nullptr);
 
-	static void init();
+	static bool init();
 	
 	FCommandStruct CommandStruct;
 
@@ -374,23 +406,23 @@ public:
 	static QList<FCommandLinkStruct> CommandsList;
 
 
-	static QList<FCommandDiceStruct> DiceCommands;
-	static QList<FCommandSkillStruct> SkillCommands;
-	static QList<FCommandStruct> GeneralCommands;
-	static QList<FCommandAutoStruct> AutoCommands;
-	static QList<FCommandTriggerStruct> TriggerCommands;
+	//static QList<FCommandDiceStruct> DiceCommands;
+	//static QList<FCommandSkillStruct> SkillCommands;
+	static QList<FCommandStruct> GeneralCommandsList;
+	static QList<FCommandAutoStruct> AutoCommandsList;
+	static QList<FCommandTriggerStruct> TriggerCommandsList;
 
-	static void ReadCommands( bool& _Result );
+	static bool ReadCommands();
 
-	static void ReadDiceCommands( QList<FCommandDiceStruct>& _Commands, bool& _Result );
+	//static bool ReadDiceCommands( QList<FCommandDiceStruct>& _Commands );
 
-	static void ReadSkillCommands( QList<FCommandSkillStruct>& _Commands, bool& _Result );
+	//static bool ReadSkillCommands( QList<FCommandSkillStruct>& _Commands );
 
-	static void ReadGeneralCommands( QList<FCommandStruct>& _Commands, bool& _Result );
+	static bool ReadGeneralCommands( QList<FCommandStruct>& _Commands );
 
-	static void ReadAutoCommands( QList<FCommandAutoStruct>& _Commands, bool& _Result );
+	static bool ReadAutoCommands( QList<FCommandAutoStruct>& _Commands );
 
-	static void ReadTriggerCommands( QList<FCommandTriggerStruct>& _Commands, bool& _Result );
+	static bool ReadTriggerCommands( QList<FCommandTriggerStruct>& _Commands );
 
 private:
 	

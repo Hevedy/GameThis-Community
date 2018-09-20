@@ -40,11 +40,11 @@ SOFTWARE.
 #ifndef SCRIPTING_H
 #define SCRIPTING_H
 
-#include <QObject>
-#include <QtMath>
 #include "gmMachine.h"
 #include "gmCall.h"
 #include "gmThread.h"
+#include <QObject>
+#include <QtMath>
 #include "GlobalFunctions.h"
 #include "Common.h"
 #include "Commands.h"
@@ -64,8 +64,9 @@ class Scripting : public QObject
 public:
 	explicit Scripting(QObject *parent = nullptr);
 
-	static void init();
+	static bool init();
 	
+	static bool ProcessingCommand;
 
 	static QList<FScrGlobalVarStruct*> GlobalVarsList;
 	static QList<FScrTokenStruct*> TokensList;
