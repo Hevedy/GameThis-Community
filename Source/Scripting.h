@@ -40,9 +40,8 @@ SOFTWARE.
 #ifndef SCRIPTING_H
 #define SCRIPTING_H
 
-#include "gmMachine.h"
-#include "gmCall.h"
-#include "gmThread.h"
+//#define WIN32_LEAN_AND_MEAN
+
 #include <QObject>
 #include <QtMath>
 #include "GlobalFunctions.h"
