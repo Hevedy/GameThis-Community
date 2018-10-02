@@ -1,3 +1,3 @@
 # Game This - Community Edition
-This is part of the app game source files under GPL v3 license. 
-The game example and plugins are under MIT license.
+This is part of the app game source files <Source\...> under GPL v3 license.  
+The game example <Game\...> and plugins <Plugins\...> are under MIT license.
