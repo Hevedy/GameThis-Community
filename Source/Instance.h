@@ -37,81 +37,81 @@ SOFTWARE.
 */
 
 
-#ifndef RPGPLAYER_H
-#define RPGPLAYER_H
+#ifndef INSTANCE_H
+#define INSTANCE_H
 
 #include <QObject>
-#include "GlobalFunctions.h"
-#include "RPGCharacter.h"
-#include "RPGDice.h"
-#include "Commands.h"
-#include "RPGItem.h"
 
+namespace GI {
 
-enum class ERPGPlayerTypeList {
-	eAdmin,
-	eMod,
-	ePlayer
-};
+    extern bool InJob;
+    extern bool Loading;
 
-enum class ERPGPlayerStatusList {
-	ePlaying,
-	eWaiting,
-	eTurn
-};
+    extern QString SettingsFile;
+    extern QString CoreFile;
+    extern QString ContentFolder;
+    extern QString RootFolder;
+}
 
-class RPGPlayer : public QObject
+class Instance : public QObject
 {
     Q_OBJECT
 public:
-    explicit RPGPlayer(QObject *parent = nullptr);
+    explicit Instance(QObject* _Parent = nullptr);
 
-    void init();
+    static int VersionMajor;
+    static int VersionMinor;
+    static int VersionFix;
+    static int VersionBuild;
+    static QString Version;
 
-    // Player Character
-    RPGCharacter* Character;
+    static int VersionUMajor;
+    static int VersionUMinor;
+    static int VersionUFix;
+    static int VersionUBuild;
+    static QString VersionU;
 
-    /// Player Dice
-    RPGDice* Dice;
+    static qint32 AudioMasterVolume;
+    static qint32 AudioEffectsVolume;
+    static qint32 AudioDialogVolume;
+    static qint32 AudioUIVolume;
+    static qint32 AudioMusicVolume;
+    static qint32 AudioSpeecherVolume;
 
-    // Player Action
-    Commands* Action;
+    static qint32 GameLanguage;
+    static bool GameTextToSpeech;
 
-    // Action Used
-    bool ActionUsed;
+    static qint32 GameHUDSize;
+    static qint32 GameEffectIntensity;
 
-    // Dice Used
-    bool DiceUsed;
+    static qint32 ResolutionX;
+    static qint32 ResolutionY;
 
-    // Is playing
-    bool Playing;
+    static qint32 CalResolutionX;
+    static qint32 CalResolutionY;
 
-    // Current turn ?
-    bool OnTurn;
+    static qint32 MonitorID;
+    static qint32 MonitorName;
 
-    // Social Public Management
+    static QString KeyUp;
+    static QString KeyDown;
+    static QString KeyRight;
+    static QString KeyLeft;
 
-    /// Player type in game
-    ERPGPlayerTypeList Type;
+    static QString KeyEnter;
+    static QString KeyNext;
+    static QString KeyPrev;
 
-    /// Current status in game
-    ERPGPlayerStatusList Status;
-
-    // Social
-
-    QString TwitchName;
-    QString DiscordName;
-    QString SteamName;
-
-    QString NickName;
-
-private:
+    static QString KeyOption1;
+    static QString KeyOption2;
+    static QString KeyOption3;
+    static QString KeyOption4;
+    static QString KeyOption5;
+    static QString KeyOption6;
 
 signals:
 
 public slots:
-
 };
 
-#endif // RPGPLAYER_H
-
+#endif // INSTANCE_H

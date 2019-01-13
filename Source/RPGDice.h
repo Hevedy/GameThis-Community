@@ -5,7 +5,7 @@ Game This - Community Edition by Hevedy
 <https://github.com/Hevedy/GameThis-Community>
 
 Game This - Community Edition GPL Source Code
-Copyright (C) 2018 Hevedy <https://github.com/Hevedy>.
+Copyright (C) 2018-2019 Hevedy <https://github.com/Hevedy>.
 
 This file is part of the Game This - Community Edition GPL Source Code.
 
@@ -37,15 +37,15 @@ SOFTWARE.
 */
 
 
-#ifndef GDICE_H
-#define GDICE_H
+#ifndef RPGDICE_H
+#define RPGDICE_H
 
 #include <QObject>
 #include "GlobalFunctions.h"
 
 #define DiceSTR Dices
 
-struct FDiceStruct {
+struct FRPGDiceStruct {
 public:
 
 	// Name
@@ -59,7 +59,7 @@ public:
 	// Count from 0 rather than 1
 	bool startZero;
 	
-	FDiceStruct( QString _Name = "", QString _Desc = "", QString _Command = "", quint8 _SidesNum = 1, bool _StartZero = false )
+	FRPGDiceStruct( QString _Name = "", QString _Desc = "", QString _Command = "", quint8 _SidesNum = 1, bool _StartZero = false )
 	: name( _Name )
 	, desc( _Desc )
 	, command( _Command )
@@ -68,12 +68,12 @@ public:
 };
 
 
-class GDice : public QObject
+class RPGDice : public QObject
 {
     Q_OBJECT
 	
 public:
-    explicit GDice(QObject *parent = nullptr);
+	explicit RPGDice(QObject* _Parent = nullptr);
 
 	void init();
 	
@@ -108,4 +108,4 @@ signals:
 public slots:
 };
 
-#endif // GDICE_H
+#endif // RPGDICE_H

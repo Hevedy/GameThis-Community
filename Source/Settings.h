@@ -37,81 +37,25 @@ SOFTWARE.
 */
 
 
-#ifndef RPGPLAYER_H
-#define RPGPLAYER_H
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 #include <QObject>
 #include "GlobalFunctions.h"
-#include "RPGCharacter.h"
-#include "RPGDice.h"
-#include "Commands.h"
-#include "RPGItem.h"
+#include "Common.h"
 
-
-enum class ERPGPlayerTypeList {
-	eAdmin,
-	eMod,
-	ePlayer
-};
-
-enum class ERPGPlayerStatusList {
-	ePlaying,
-	eWaiting,
-	eTurn
-};
-
-class RPGPlayer : public QObject
+class Settings : public QObject
 {
     Q_OBJECT
 public:
-    explicit RPGPlayer(QObject *parent = nullptr);
+    explicit Settings(QObject *parent = nullptr);
 
-    void init();
+    static bool init();
 
-    // Player Character
-    RPGCharacter* Character;
-
-    /// Player Dice
-    RPGDice* Dice;
-
-    // Player Action
-    Commands* Action;
-
-    // Action Used
-    bool ActionUsed;
-
-    // Dice Used
-    bool DiceUsed;
-
-    // Is playing
-    bool Playing;
-
-    // Current turn ?
-    bool OnTurn;
-
-    // Social Public Management
-
-    /// Player type in game
-    ERPGPlayerTypeList Type;
-
-    /// Current status in game
-    ERPGPlayerStatusList Status;
-
-    // Social
-
-    QString TwitchName;
-    QString DiscordName;
-    QString SteamName;
-
-    QString NickName;
-
-private:
-
+    static bool LoadScriptSettings();
 signals:
 
 public slots:
-
 };
 
-#endif // RPGPLAYER_H
-
+#endif // SETTINGS_H

@@ -37,73 +37,82 @@ SOFTWARE.
 */
 
 
-#ifndef RPGPLAYER_H
-#define RPGPLAYER_H
+#ifndef MINIGAMES_H
+#define MINIGAMES_H
 
 #include <QObject>
 #include "GlobalFunctions.h"
-#include "RPGCharacter.h"
-#include "RPGDice.h"
-#include "Commands.h"
-#include "RPGItem.h"
 
 
-enum class ERPGPlayerTypeList {
-	eAdmin,
-	eMod,
-	ePlayer
+struct FQAStruct {
+public:
+
+	// Questions
+	QList<QString> questions;
+	// Answers
+	QList<QString> answers;
+
+
+
+	FQAStruct( QList<QString> _Questions = {} , QList<QString> _Answers = {} )
+	: questions( _Questions )
+	, answers( _Answers ) {}
 };
 
-enum class ERPGPlayerStatusList {
-	ePlaying,
-	eWaiting,
-	eTurn
-};
-
-class RPGPlayer : public QObject
+class MiniGames : public QObject
 {
     Q_OBJECT
 public:
-    explicit RPGPlayer(QObject *parent = nullptr);
+    explicit MiniGames(QObject* _Parent = nullptr);
 
-    void init();
+    static bool init();
 
-    // Player Character
-    RPGCharacter* Character;
+    // Chest game
+    // TODO Negative chests ?
+    static bool ChestEnabled;
+    static bool ChestToPick;
+    static int ChestPoints;
+    static int ChestPointsRand;
+    static int ChestCurrency;
+    static int ChestCurrencyRand;
+    static int ChestTickets;
+    static int ChestTicketsRand;
+    static int ChestKeys;
+    static int ChestKeysRand;
+    static bool ChestAutoSpawn;
+    static bool ChestReadyToSpawn;
+    static int ChestSpawnMinutesRate;
+    static int ChestSpawnMinutesCount;
+    static int ChestSpawnMinimumUsers;
 
-    /// Player Dice
-    RPGDice* Dice;
+    // Question & Answer game
+    static bool QAEnabled;
+    static QList<FQAStruct*> QAList;
+    static int QAPickedID;
+    static bool QAToPick;
+    static int QAPoints;
+    static int QAPointsRand;
+    static int QACurrency;
+    static int QACurrencyRand;
+    static int QATickets;
+    static int QATicketsRand;
+    static bool QAAutoSpawn;
+    static int QASpawnMinutesRate;
+    static int QASpawnMinimumUsers;
 
-    // Player Action
-    Commands* Action;
+    // Piano game
+    static bool PianoEnabled;
+    static bool PianoReady;
+    static bool PianoInUse;
 
-    // Action Used
-    bool ActionUsed;
 
-    // Dice Used
-    bool DiceUsed;
+    void ChestSpawn(  );
+    void ChestPick(  );
 
-    // Is playing
-    bool Playing;
+    void QuestionA(  );
+    void QAnswer(  );
 
-    // Current turn ?
-    bool OnTurn;
-
-    // Social Public Management
-
-    /// Player type in game
-    ERPGPlayerTypeList Type;
-
-    /// Current status in game
-    ERPGPlayerStatusList Status;
-
-    // Social
-
-    QString TwitchName;
-    QString DiscordName;
-    QString SteamName;
-
-    QString NickName;
+    void PianoUse(  );
 
 private:
 
@@ -113,5 +122,5 @@ public slots:
 
 };
 
-#endif // RPGPLAYER_H
+#endif // MINIGAMES_H
 

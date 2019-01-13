@@ -5,7 +5,7 @@ Game This - Community Edition by Hevedy
 <https://github.com/Hevedy/GameThis-Community>
 
 Game This - Community Edition GPL Source Code
-Copyright (C) 2018 Hevedy <https://github.com/Hevedy>.
+Copyright (C) 2018-2019 Hevedy <https://github.com/Hevedy>.
 
 This file is part of the Game This - Community Edition GPL Source Code.
 
@@ -44,7 +44,7 @@ RPGItem::RPGItem(QObject* _Parent) : QObject(_Parent)
 
 }
 
-void RPGItem::Init() {
+void RPGItem::init() {
 	
 	
 }

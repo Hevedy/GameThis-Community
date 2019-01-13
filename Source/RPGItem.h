@@ -5,7 +5,7 @@ Game This - Community Edition by Hevedy
 <https://github.com/Hevedy/GameThis-Community>
 
 Game This - Community Edition GPL Source Code
-Copyright (C) 2018 Hevedy <https://github.com/Hevedy>.
+Copyright (C) 2018-2019 Hevedy <https://github.com/Hevedy>.
 
 This file is part of the Game This - Community Edition GPL Source Code.
 
@@ -45,7 +45,7 @@ SOFTWARE.
 
 #define ItemSTR Items
 
-enum class EItemTypeList {
+enum class ERPGItemTypeList {
 	eNone,
 	eWeapon,
 	eTool,
@@ -71,7 +71,7 @@ enum class EItemSlotList {
 };
 */
 
-enum class EItemUsesList {
+enum class ERPGItemUsesList {
 	eInfinite,
 	eOne,
 	eNumber,
@@ -80,7 +80,7 @@ enum class EItemUsesList {
 	eOther
 };
 
-struct FItemSlotStruct {
+struct FRPGItemSlotStruct {
 public:
 
 
@@ -93,14 +93,14 @@ public:
 	// Is a character slot ?
 	bool isCharacterSlot;
 
-	FItemSlotStruct( QString _NameID = "", QString _Name = "", QString _Desc = "", bool _IsCharacterSlot = true )
+	FRPGItemSlotStruct( QString _NameID = "", QString _Name = "", QString _Desc = "", bool _IsCharacterSlot = true )
 	: nameID( _NameID )
 	, name( _Name )
 	, desc( _Desc )
 	, isCharacterSlot( _IsCharacterSlot ) {}
 };
 
-struct FItemStruct {
+struct FRPGItemStruct {
 public:
 
 	// Name
@@ -114,16 +114,16 @@ public:
 	// Can be placed in the world
 	bool placeable;
 	// Type
-	EItemTypeList type;
+	ERPGItemTypeList type;
 	// Space on the inventory
 	int weight;
 	// Slots where can be placed
-	QList<FItemSlotStruct> validSlots;
+	QList<FRPGItemSlotStruct> validSlots;
 	// Status of the object
 	int status;
 	
-	FItemStruct( QString _Name = "", QString _Desc = "", QString _Command = "", bool _Placeable = false, EItemTypeList _Type = {},
-				   int _Weight = 0, QList<FItemSlotStruct> _ValidSlots = {}, int _Status = 0 )
+	FRPGItemStruct( QString _Name = "", QString _Desc = "", QString _Command = "", bool _Placeable = false, ERPGItemTypeList _Type = {},
+				   int _Weight = 0, QList<FRPGItemSlotStruct> _ValidSlots = {}, int _Status = 0 )
 	: name( _Name )
 	, desc( _Desc )
 	, command( _Command )

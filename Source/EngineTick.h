@@ -37,81 +37,73 @@ SOFTWARE.
 */
 
 
-#ifndef RPGPLAYER_H
-#define RPGPLAYER_H
+#ifndef ENGINETICK_H
+#define ENGINETICK_H
 
 #include <QObject>
+#include <QList>
+#include <QTimer>
+#include <QElapsedTimer>
 #include "GlobalFunctions.h"
-#include "RPGCharacter.h"
-#include "RPGDice.h"
-#include "Commands.h"
-#include "RPGItem.h"
+#include "MainLoopTick.h"
 
-
-enum class ERPGPlayerTypeList {
-	eAdmin,
-	eMod,
-	ePlayer
-};
-
-enum class ERPGPlayerStatusList {
-	ePlaying,
-	eWaiting,
-	eTurn
-};
-
-class RPGPlayer : public QObject
+class EngineTick : public QObject
 {
     Q_OBJECT
 public:
-    explicit RPGPlayer(QObject *parent = nullptr);
+    explicit EngineTick( MainLoopTick* _MainLoop = nullptr, QObject* _Parent = nullptr );
+
+    quint32 TickCount();
+    double TickMS();
+    double TickMSCount();
+    quint32 TickFixedCount();
+
+signals:
+    void sendTick( const double _Time );
+    void sendTickFixed();
+
+    void sendTickFixedPerMinute();
+    void sendTickFixedPerSecond();
+
+public slots:
+    void tick( const double _Time );
+    void tickFixed();
 
     void init();
 
-    // Player Character
-    RPGCharacter* Character;
-
-    /// Player Dice
-    RPGDice* Dice;
-
-    // Player Action
-    Commands* Action;
-
-    // Action Used
-    bool ActionUsed;
-
-    // Dice Used
-    bool DiceUsed;
-
-    // Is playing
-    bool Playing;
-
-    // Current turn ?
-    bool OnTurn;
-
-    // Social Public Management
-
-    /// Player type in game
-    ERPGPlayerTypeList Type;
-
-    /// Current status in game
-    ERPGPlayerStatusList Status;
-
-    // Social
-
-    QString TwitchName;
-    QString DiscordName;
-    QString SteamName;
-
-    QString NickName;
-
 private:
 
-signals:
+    QTimer* Timer;
+    MainLoopTick* MainLoop;
 
-public slots:
+    bool bTickExecuted;
+
+    // Tick const app
+    double MSCurrent;
+    double MSLast;
+    double MSCount;
+    double MSCountLimit;
+    quint32 MSNumOverruns;
+
+    quint32 TickCounter;
+    quint32 TickCounterLast;
+    quint32 TickCounterLimit;
+    quint32 TickNumOverruns;
+
+    // Tick with fixed FPS 20 Default
+    quint32 TickFixedCounter;
+    quint32 TickFixedCounterLast;
+    quint32 TickFixedCounterLimit;
+    quint32 TickFixedNumOverruns;
+
+    quint32 TickFixedMinCounter;
+    quint32 TickFixedMinCounterLast;
+    quint32 TickFixedMinCounterLimit;
+
+    quint32 TickFixedSecCounter;
+    quint32 TickFixedSecCounterLast;
+    quint32 TickFixedSecCounterLimit;
 
 };
 
-#endif // RPGPLAYER_H
-
+#endif // ENGINETICK_H

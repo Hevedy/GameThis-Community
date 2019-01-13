@@ -37,81 +37,28 @@ SOFTWARE.
 */
 
 
-#ifndef RPGPLAYER_H
-#define RPGPLAYER_H
-
-#include <QObject>
-#include "GlobalFunctions.h"
-#include "RPGCharacter.h"
-#include "RPGDice.h"
-#include "Commands.h"
-#include "RPGItem.h"
+#include "Instance.h"
 
 
-enum class ERPGPlayerTypeList {
-	eAdmin,
-	eMod,
-	ePlayer
-};
+bool GI::InJob = false;
+QString GI::ContentFolder = ":base";
 
-enum class ERPGPlayerStatusList {
-	ePlaying,
-	eWaiting,
-	eTurn
-};
 
-class RPGPlayer : public QObject
+int Instance::VersionMajor = 1;
+int Instance::VersionMinor = 0;
+int Instance::VersionFix = 0;
+int Instance::VersionBuild = 0;
+QString Instance::Version = "1.0.0.0";
+int Instance::VersionUMajor = 1;
+int Instance::VersionUMinor = 0;
+int Instance::VersionUFix = 0;
+int Instance::VersionUBuild = 0;
+QString Instance::VersionU = "1.0.0.0";
+
+qint32 Instance::GameLanguage = 0;
+
+
+Instance::Instance(QObject* _Parent) : QObject(_Parent)
 {
-    Q_OBJECT
-public:
-    explicit RPGPlayer(QObject *parent = nullptr);
 
-    void init();
-
-    // Player Character
-    RPGCharacter* Character;
-
-    /// Player Dice
-    RPGDice* Dice;
-
-    // Player Action
-    Commands* Action;
-
-    // Action Used
-    bool ActionUsed;
-
-    // Dice Used
-    bool DiceUsed;
-
-    // Is playing
-    bool Playing;
-
-    // Current turn ?
-    bool OnTurn;
-
-    // Social Public Management
-
-    /// Player type in game
-    ERPGPlayerTypeList Type;
-
-    /// Current status in game
-    ERPGPlayerStatusList Status;
-
-    // Social
-
-    QString TwitchName;
-    QString DiscordName;
-    QString SteamName;
-
-    QString NickName;
-
-private:
-
-signals:
-
-public slots:
-
-};
-
-#endif // RPGPLAYER_H
-
+}

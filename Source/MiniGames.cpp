@@ -37,81 +37,68 @@ SOFTWARE.
 */
 
 
-#ifndef RPGPLAYER_H
-#define RPGPLAYER_H
-
-#include <QObject>
-#include "GlobalFunctions.h"
-#include "RPGCharacter.h"
-#include "RPGDice.h"
-#include "Commands.h"
-#include "RPGItem.h"
+#include "MiniGames.h"
 
 
-enum class ERPGPlayerTypeList {
-	eAdmin,
-	eMod,
-	ePlayer
-};
+bool MiniGames::ChestEnabled;
+bool MiniGames::ChestToPick;
+int MiniGames::ChestPoints;
+int MiniGames::ChestPointsRand;
+int MiniGames::ChestCurrency;
+int MiniGames::ChestCurrencyRand;
+int MiniGames::ChestTickets;
+int MiniGames::ChestTicketsRand;
+int MiniGames::ChestKeys;
+int MiniGames::ChestKeysRand;
+bool MiniGames::ChestAutoSpawn;
+bool MiniGames::ChestReadyToSpawn;
+int MiniGames::ChestSpawnMinutesRate;
+int MiniGames::ChestSpawnMinutesCount;
+int MiniGames::ChestSpawnMinimumUsers;
 
-enum class ERPGPlayerStatusList {
-	ePlaying,
-	eWaiting,
-	eTurn
-};
+bool MiniGames::QAEnabled;
+QList<FQAStruct*> MiniGames::QAList;
+int MiniGames::QAPickedID;
+bool MiniGames::QAToPick;
+int MiniGames::QAPoints;
+int MiniGames::QAPointsRand;
+int MiniGames::QACurrency;
+int MiniGames::QACurrencyRand;
+int MiniGames::QATickets;
+int MiniGames::QATicketsRand;
+bool MiniGames::QAAutoSpawn;
+int MiniGames::QASpawnMinutesRate;
+int MiniGames::QASpawnMinimumUsers;
 
-class RPGPlayer : public QObject
+bool MiniGames::PianoEnabled;
+bool MiniGames::PianoReady;
+bool MiniGames::PianoInUse;
+
+MiniGames::MiniGames(QObject* _Parent) : QObject(_Parent)
 {
-    Q_OBJECT
-public:
-    explicit RPGPlayer(QObject *parent = nullptr);
 
-    void init();
+}
 
-    // Player Character
-    RPGCharacter* Character;
+bool MiniGames::init() {
+    return true;
+}
 
-    /// Player Dice
-    RPGDice* Dice;
+void MiniGames::ChestSpawn(  ) {
 
-    // Player Action
-    Commands* Action;
+}
 
-    // Action Used
-    bool ActionUsed;
+void MiniGames::ChestPick(  ) {
 
-    // Dice Used
-    bool DiceUsed;
+}
 
-    // Is playing
-    bool Playing;
+void MiniGames::QuestionA(  ) {
 
-    // Current turn ?
-    bool OnTurn;
+}
 
-    // Social Public Management
+void MiniGames::QAnswer(  ) {
 
-    /// Player type in game
-    ERPGPlayerTypeList Type;
+}
 
-    /// Current status in game
-    ERPGPlayerStatusList Status;
+void MiniGames::PianoUse(  ) {
 
-    // Social
-
-    QString TwitchName;
-    QString DiscordName;
-    QString SteamName;
-
-    QString NickName;
-
-private:
-
-signals:
-
-public slots:
-
-};
-
-#endif // RPGPLAYER_H
-
+}
