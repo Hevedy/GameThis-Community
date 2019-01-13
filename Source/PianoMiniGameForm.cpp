@@ -74,7 +74,7 @@ PianoMiniGameForm::~PianoMiniGameForm()
 }
 
 void PianoMiniGameForm::init() {
-    //VisualSetup();
+
 }
 
 void PianoMiniGameForm::getTickFixed() {
@@ -459,22 +459,14 @@ void PianoMiniGameForm::PlayPianoNote( const QString _Note, const int _Octave, c
 
     if ( bEnabled && bValid ) {
         if ( bEnabledAudio ) {
-            //qDebug() << audioURL + ".wav";
-            ///QSound::play(audioURL + ".wav");
-            //QSound note(audioURL + ".wav");
-            //note.play();
             QSoundEffect effect;
             effect.setSource(QUrl::fromLocalFile(audioURL + ".wav"));
-            //effect.setLoopCount(QSoundEffect::Infinite);
             effect.setVolume(1.0);
             effect.play();
         }
-        //LastNote = Note;
-        //LastOctave = octave;
-        //bWaitingDisable = true;
+
     } else if ( !bEnabled && bValid ) {
-        //bWaitingDisable = false;
-        //WaitingCount = 0;
+
     } else {
         qDebug() << "Audio File Not Found or Invalid Note";
     }

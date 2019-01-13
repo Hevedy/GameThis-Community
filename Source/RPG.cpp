@@ -193,27 +193,6 @@ void RPG::SetupPlayer( const QList<int> _CharactersIndex, const QList<int> _Obje
 
 }
 
-/*
-void Game::NewGameStart( const EGameWorldsList World, const EGameMissionList Mission ) {
-    bool result;
-    //result = CurrentWorld->LoadWorld( World );
-    //result = CurrentMission->LoadMission( Mission );
-    // Setup Player
-    //result = CurrentPlayer->LoadPlayerProfile();
-
-    qDebug() << int(World);
-    qDebug() << int(Mission);
-    //Twitch->sendMessage("Hello Pepe");
-
-    qDebug() << "Hello Pepe";
-    WriteTextEffect( "Mirad mis pelotas, la ventana a LA VENTANA", EGamePanelList::EInfo, EGameTypeEffectList::ETyping );
-    WriteTextEffect( "456", EGamePanelList::EInfo, EGameTypeEffectList::ENumberCount );
-    //parent()->
-    //WaitForTicks( 50 ); // Works, colapsa solo el game y espera
-    qDebug() << "Adios Pepe";
-
-}
-*/
 // Game Logics on movement etc
 void RPG::SetupGame() {
 

@@ -42,8 +42,6 @@ SOFTWARE.
 QList<FCommandFunctionStruct> Commands::FunctionsList;
 QList<FCommandLinkStruct> Commands::CommandsList;
 
-//QList<FCommandDiceStruct> Commands::DiceCommands;
-//QList<FCommandSkillStruct> Commands::SkillCommands;
 QList<FCommandStruct> Commands::GeneralCommandsList;
 QList<FCommandAutoStruct> Commands::AutoCommandsList;
 QList<FCommandTriggerStruct> Commands::TriggerCommandsList;
@@ -61,10 +59,6 @@ bool Commands::init() {
 
 bool Commands::ReadCommands() {
 	qDebug() << "Read Commands";
-	//ReadDiceCommands( DiceCommands, result );
-	//if ( !result ) { _Result = result; return; }
-	//ReadSkillCommands( SkillCommands, result );
-	//if ( !result ) { _Result = result; return; }
 	if( !ReadGeneralCommands( GeneralCommandsList ) ) { return false; }
 	if( !ReadAutoCommands( AutoCommandsList ) ) { return false; }
 	if( !ReadTriggerCommands( TriggerCommandsList ) ) { return false; }
@@ -72,45 +66,6 @@ bool Commands::ReadCommands() {
 	return true;
 }
 
-/*
-void Commands::ReadDiceCommands( QList<FCommandDiceStruct>& _Commands, bool& _Result ) {
-	QJsonObject fileJSON;
-	bool result = GlobalFunctions::GetGameJSONObject( fileJSON , EGameFilesList::eCommands );
-	if ( !result ) { return; }
-
-
-	for (int i = 0; i < fileJSON["DiceCommands"].toArray().size(); ++i) {
-		QJsonObject workObj = fileJSON["DiceCommands"].toArray()[i].toObject();
-		FCommandDiceStruct workCommand;
-		QList<QString> functionList;
-		QList<QString> functionValueList;
-		QList<bool> boolMixedList;
-		QList<bool> intInfiniteList;
-		QList<bool> floatInfiniteList;
-		bool blocalResult = false;
-		workCommand.Name = workObj["Name"].toString();
-	for (int ii = 0; ii < workObj["Command"].toArray().size(); ++ii) {
-		workCommand.Commands << workObj["Command"].toArray()[i].toString();
-	}
-	workCommand.bInputNeeded = GameFunctions::STRToBool( workObj["InputNeeded"].toString(),
-		 false, functionList, functionValueList, boolMixedList, blocalResult )[0];
-	workCommand.Name = workObj["InputDefault"].toString();
-	for (int ii = 0; ii < workObj["GroupsLocked"].toArray().size(); ++ii) {
-		workObj["GroupsLocked"].toArray()[i].toString();
-	}
-	for (int ii = 0; ii < workObj["GroupsLocked"].toArray().size(); ++ii) {
-		workObj["GroupsLocked"].toArray()[i].toString();
-	}
-
-	}
-
-	_Result = true;
-}
-
-void Commands::ReadSkillCommands( QList<FCommandSkillStruct>& _Commands, bool& _Result ) {
-
-}
-*/
 bool Commands::ReadGeneralCommands( QList<FCommandStruct>& _Commands ) {
 	qDebug() << "Read Piano";
 	QJsonObject fileJSON;
