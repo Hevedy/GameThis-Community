@@ -130,6 +130,8 @@ public:
 		void GetSocketMessages();
 
 private:
+	uint32* NexusID;
+
 	bool NexusConnected = false;
 	bool NexusReady = false;
 	bool NexusLastConnected = false;

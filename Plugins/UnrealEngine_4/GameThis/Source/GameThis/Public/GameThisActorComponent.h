@@ -80,5 +80,4 @@ public:
 
 private:
 
-	uint32* NexusID;
 };
