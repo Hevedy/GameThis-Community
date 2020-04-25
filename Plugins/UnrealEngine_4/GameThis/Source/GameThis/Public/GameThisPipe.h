@@ -27,29 +27,29 @@ SOFTWARE.
 
 /*
 ================================================
-GameThis.cpp
+GameThisPipe.h
 ================================================
 */
 
 
-#include "GameThis.h"
+#pragma once
 
-class FGameThis : public IGameThis {
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+#include "CoreMinimal.h"
+#include "Engine.h"
+#include "Engine/Engine.h"
+#include "GameThisPipe.generated.h"
+
+UCLASS()
+class GAMETHIS_API UGameThisPipe : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+	UGameThisPipe( const FObjectInitializer& ObjectInitializer );
+	
+protected:
+
+public:
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Setup" )
+		bool CreatePipe();
+	
 };
-
-IMPLEMENT_MODULE( FGameThis, GameThis )
-
-
-
-void FGameThis::StartupModule() {
-	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
-}
-
-
-void FGameThis::ShutdownModule() {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-}

@@ -17,7 +17,7 @@
 			"LoadingPhase": "Default"
 		}
 	],
-	"EnabledByDefault": false,
+	"EnabledByDefault": true,
 	"CanContainContent": false,
 	"IsBetaVersion": false,
 	"Installed": true

@@ -5,7 +5,7 @@ Game This - Community by David Palacios (Hevedy) <https://github.com/Hevedy>
 <https://github.com/Hevedy/GameThis-Community>
 
 The MIT License (MIT)
-Copyright (C) 2018-2019 David Palacios (Hevedy) <https://github.com/Hevedy>
+Copyright (c) 2018-2020 David Palacios (Hevedy) <https://github.com/Hevedy>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -27,7 +27,7 @@ SOFTWARE.
 
 /*
 ================================================
-GameThisMisc.h
+GameThisCore.h
 ================================================
 */
 
@@ -35,65 +35,129 @@ GameThisMisc.h
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine.h"
-#include "Engine/Engine.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "GameThisIO.h"
+#include "GameThisStructs.h"
 #include "GameThisCore.generated.h"
 
 
-UENUM()
-enum class EGTAppList : uint8 {
-	eGame 	UMETA( DisplayName = "Game" ),
-	eTool	UMETA( DisplayName = "Tool" )
-};
+// Event triggered when receiveign a message from the Twitch API
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusChatMessageReceived, FGameThisChatMessageData, _Data );
 
-UENUM()
-enum class EGTAppModeList : uint8 {
-	eRealtime 		UMETA( DisplayName = "Realtime" ),
-	eNonRealtime	UMETA( DisplayName = "Non Realtime" )
-};
+// Event triggered when the connection to twitch chat changes
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusConnectionChanged, bool, _IsConnected );
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusConnectionStatusChanged, bool, _IsReady );
+
 
 UCLASS()
-class GAMETHIS_API UGameThisCore : public UBlueprintFunctionLibrary {
+class GAMETHIS_API UGameThisCore : public UObject {
 	GENERATED_BODY()
 
 	UGameThisCore( const FObjectInitializer& ObjectInitializer );
-	
-	bool bGameThisConnected;
-	
-	bool bGameThisReady;
-	
-	bool bWaitingReply;
-	
-	bool bGameSetup;
-	
-	bool bPlayerSetup;
-	
-	bool bGameThisSetup;
 
-protected:
 
 public:
 
+	virtual void BeginDestroy() override;
 
-	UFUNCTION( BlueprintCallable, Category = "GameThis|Setup" )
-		bool SetupApp( const FString _AppName, const EGTAppList _AppType, const EGTAppModeList _AppMode );
-		
-	UFUNCTION( BlueprintCallable, Category = "GameThis|Setup" )
-		bool SetupUser( const FString _GTUsername, const FString _GTURL );
+	//
+	// CORE
+	//
 
-	/** Returns if Game This is connected */
+	// Setup the nexus parameters
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
+		bool SetNexusData( const TArray<FString>& _Admins, const TArray<FString>& _Moderators, const TArray<FString>& _VIPs, const TArray<FString>& _Bots );
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
+		bool SetDiscordData( const FString& _ServerName, const FString& _ChannelName, const FString& _AdminName, const FString& _BotName, const FString& _Password );
+
+	// Create the nexus and launch it
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
+		bool CreateNexus( const EGameThisProcessType _Type );
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
+		bool IsNexusRunning();
+
+	// Returns if Game This is connected 
 	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
 		bool IsGameThisConnected();
 		
-	/** Returns if Game This is ready */
+	// Returns if Game This is ready 
 	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
 		bool IsGameThisReady();
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
+		void Loop();
+
+	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
+		FNexusConnectionChanged OnConnectionChanged;
+
+	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
+		FNexusConnectionStatusChanged OnConnectionStatusChanged;
+
+	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
+		FNexusChatMessageReceived OnChatMessageReceived;
+
+	//
+	// TUNNEL
+	//
 	
-	/** Returns if the file ready to be read */
-	bool ReplyReady();
-	
-	bool SendData();
-	
-	bool GetData();
-	
+	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
+		bool IsTunnelValid();
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis" )
+		void GetTunnelMessages();
+
+	//
+	// PIPES
+	//
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
+		bool ArePipesValid();
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis" )
+		void GetPipeMessages();
+
+	//
+	// SOCKETS
+	//
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
+		bool AreSocketsValid();
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis" )
+		void GetSocketMessages();
+
+private:
+	bool NexusConnected = false;
+	bool NexusReady = false;
+	bool NexusLastConnected = false;
+	bool NexusLastReady = false;
+
+	FString KeyID = "ABC";
+	EGameThisProcessType ProcessType = EGameThisProcessType::eGT_DEFAULT;
+
+	TArray<FGameThisChatMessageData> ChatMessages;
+	int32 ChatMessagesLimit = 999;
+
+	// Logics
+	TArray<FString> Admins;
+	TArray<FString> Moderators;
+	TArray<FString> VIPs;
+	TArray<FString> Bots;
+
+	//Social
+	bool DiscordValid = false;
+	FString DiscordAdminName;
+	FString DiscordBotName;
+	FString DiscordServer;
+	FString DiscordChannel;
+	FString DiscordBotPassword;
+
+	// TUNNEL
+	TArray<FString> TunnelMessages;
+	int32 TunnelMessagesLimit = 9999;
+
+
 };

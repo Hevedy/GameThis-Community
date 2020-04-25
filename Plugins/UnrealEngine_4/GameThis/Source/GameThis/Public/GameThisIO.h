@@ -5,7 +5,7 @@ Game This - Community by David Palacios (Hevedy) <https://github.com/Hevedy>
 <https://github.com/Hevedy/GameThis-Community>
 
 The MIT License (MIT)
-Copyright (C) 2018-2019 David Palacios (Hevedy) <https://github.com/Hevedy>
+Copyright (c) 2018-2020 David Palacios (Hevedy) <https://github.com/Hevedy>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -35,8 +35,10 @@ GameThisIO.h
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine.h"
-#include "Engine/Engine.h"
+#include "HAL/PlatformFilemanager.h"
+#include "Misc/App.h"
+#include "Misc/Paths.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameThisIO.generated.h"
 
 
@@ -44,47 +46,32 @@ UCLASS()
 class GAMETHIS_API UGameThisIO : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
-	UGameThisMisc( const FObjectInitializer& ObjectInitializer );
-	
-	FString GameURL;
-	
-	FString GameName;
-	
-	FString GameThisURL;
-	
-	FString GameThisUsername;
-	
-	FString InputText;
-	
-	FString OutputText;
-
-protected:
+	UGameThisIO( const FObjectInitializer& ObjectInitializer );
 
 public:
 
-	/** Returns if Game This is connected */
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool IsGameThisConnected();
-		
-	/** Returns if Game This is connected */
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool IsGameThisReady();
-	
-	/** Returns if the file ready to be read */
-	bool ReplyReady();
-	
-	
-	bool GetGameURL( FString URL );
-	
-	bool GetGameName( FString Name );
-	
-	/** Returns valid keys list */
-	bool GetGameThisFileName();
-	/** Returns complate url to file */
-	bool GetGameThisFileURL( FString URL );
-	/** Returns valid keys list */
-	bool GetGameThisURL( FString URL );
-	/** Returns Username for GameThis app */
-	bool GetGameThisUsername( FString Username );
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static FString GameName() { return FString( FApp::GetProjectName() ); };
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static FString VariableGameRootDir();
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static FString GameRootDir() { return FPaths::ConvertRelativePathToFull( FPaths::RootDir() ); };
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static FString GameThisDir() { return GameRootDir() + "GameThis/"; };
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static FString GameThisNexusExe() { return GameThisDir() + "GameThis.exe"; };
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static bool GameThisNexusExeValid() { return FPaths::FileExists( GameThisNexusExe() ); };
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static FString GameThisTunnelFile() { return GameThisDir() + "/Tunnel/Nexus.tnl"; };
+
+	UFUNCTION( BlueprintPure, Category = "GameThis|IO" )
+		static TArray<FString> TunnelFileToArray();
 
 };

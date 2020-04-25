@@ -5,7 +5,7 @@ Game This - Community by David Palacios (Hevedy) <https://github.com/Hevedy>
 <https://github.com/Hevedy/GameThis-Community>
 
 The MIT License (MIT)
-Copyright (C) 2018-2019 David Palacios (Hevedy) <https://github.com/Hevedy>
+Copyright (c) 2018-2020 David Palacios (Hevedy) <https://github.com/Hevedy>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -33,60 +33,32 @@ GameThisCore.cpp
 
 
 #include "GameThisIO.h"
-#include "GameThisPrivatePCH.h"
-
 #include "GameThisCore.h"
-
-#include "BufferArchive.h"
-#include "MemoryReader.h"
-#include "PlatformFilemanager.h"
-
+#include "GenericPlatform/GenericPlatformProcess.h"
+#include "Misc/FileHelper.h"
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformDriver.h"
-#include "Runtime/Core/Public/Misc/SecureHash.h"
-#include "GenericTeamAgentInterface.h"
-#include "MessageLog.h"
-
-// To be able to perform regex operatins on level stream info package name
-#if WITH_EDITOR
-#include "Runtime/Core/Public/Internationalization/Regex.h"
-#endif
-
 
 UGameThisIO::UGameThisIO( const class FObjectInitializer& ObjectInitializer ) {
 
 }
 
-bool UGameThisIO::IsGameThisConnected() {
-	return false;
+FString UGameThisIO::VariableGameRootDir() {
+#if WITH_EDITOR
+	return FPaths::ConvertRelativePathToFull( FPaths::ProjectSavedDir() );
+#else
+	return FPaths::ConvertRelativePathToFull( FPaths::RootDir() );
+#endif
 }
 
-bool UGameThisIO::IsGameThisReady() {
-	return false;
-}
 
-bool UGameThisIO::ReplyReady() {
-	return false;
-}
-	
-bool UGameThisIO::GetGameURL( FString URL ) {
-	return false;
-}
-	
-bool UGameThisIO::GetGameName( FString Name ) {
-	return false;
-}
+TArray<FString> UGameThisIO::TunnelFileToArray() {
+	//FString dir = GameThisTunnelFile();
+	//IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
+	TArray<FString> tunnelText;
+	if ( FFileHelper::LoadFileToStringArray( tunnelText, *GameThisTunnelFile() ) ) {
+		return tunnelText;
+	} else {
+		return {};
+	}
 
-bool UGameThisIO::GetGameThisFileName() {
-	return false;
-}
-
-bool UGameThisIO::GetGameThisFileURL( FString URL ) {
-	return false;
-}
-
-bool UGameThisIO::GetGameThisURL( FString URL ) {
-	return false;
-}
-bool UGameThisIO::GetGameThisUsername( FString Username ) {
-	return false;
 }

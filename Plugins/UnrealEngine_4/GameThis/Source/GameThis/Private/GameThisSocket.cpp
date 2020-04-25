@@ -27,29 +27,54 @@ SOFTWARE.
 
 /*
 ================================================
-GameThis.cpp
+GameThisSocket.cpp
 ================================================
 */
 
 
-#include "GameThis.h"
+#include "GameThisSocket.h"
+#include "GameThisIO.h"
+#include "Runtime/Core/Public/GenericPlatform/GenericPlatformDriver.h"
+#include "Runtime/Core/Public/Misc/SecureHash.h"
+#include "Runtime/Core/Public/Logging/MessageLog.h"
 
-class FGameThis : public IGameThis {
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
-};
-
-IMPLEMENT_MODULE( FGameThis, GameThis )
+#if WITH_EDITOR
+#include "Runtime/Core/Public/Internationalization/Regex.h"
+#endif
 
 
+UGameThisSocket::UGameThisSocket( const class FObjectInitializer& ObjectInitializer ) {
 
-void FGameThis::StartupModule() {
-	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
 }
 
 
-void FGameThis::ShutdownModule() {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
+void UGameThisSocket::Laaaaaauuuunch() {
+
+}
+
+
+bool UGameThisSocket::StartTCPReceiver( const FString& _YourChosenSocketName, const FString& _TheIP, const int32 _ThePort ){
+	return false;
+}
+
+bool UGameThisSocket::FormatIP4ToNumber(const FString& TheIP, uint8 (&Out)[4])
+{
+	return false;
+}
+
+FSocket* UGameThisSocket::CreateTCPConnectionListener(const FString& _YourChosenSocketName,const FString& _TheIP, const int32 _ThePort,const int32 _ReceiveBufferSize ) {
+	FSocket* ListenSocket;
+	
+	return ListenSocket;	
+}
+
+void UGameThisSocket::TCPConnectionListener() {
+}
+
+FString UGameThisSocket::StringFromBinaryArray(TArray<uint8>& _BinaryArray) {
+	return "";
+}
+
+void UGameThisSocket::TCPSocketListener() {
+
 }

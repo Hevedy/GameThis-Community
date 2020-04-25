@@ -5,7 +5,7 @@ Game This - Community by David Palacios (Hevedy) <https://github.com/Hevedy>
 <https://github.com/Hevedy/GameThis-Community>
 
 The MIT License (MIT)
-Copyright (C) 2018-2019 David Palacios (Hevedy) <https://github.com/Hevedy>
+Copyright (c) 2018-2019 David Palacios (Hevedy) <https://github.com/Hevedy>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -33,6 +33,7 @@ GameThis.Build.cs
 
 
 using UnrealBuildTool;
+using System.IO;
 
 public class GameThis : ModuleRules
 {
@@ -42,28 +43,19 @@ public class GameThis : ModuleRules
 		//bEnforceIWYU = false;
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicIncludePaths.AddRange(
-			new string[] {
-				"GameThis/Public",
-				// ... add public include paths required here ...
-			}
-			);
+        PublicIncludePaths.Add( Path.Combine( ModuleDirectory, "Public" ) );
+        PrivateIncludePaths.Add( Path.Combine( ModuleDirectory, "Private" ) );
 
-		PrivateIncludePaths.AddRange(
-			new string[] {
-				"GameThis/Private",
-				// ... add other private include paths required here ...
-			}
-			);
-
-		PublicDependencyModuleNames.AddRange(
+        PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
 				// ... add other public dependencies that you statically link with here ...
 				"Core",
 				"CoreUObject",
 				"Engine",
-				"InputCore"
+				"InputCore",
+				"Sockets",
+				"Networking"
 			}
 			);
 

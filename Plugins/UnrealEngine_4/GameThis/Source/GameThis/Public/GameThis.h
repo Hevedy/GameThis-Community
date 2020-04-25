@@ -5,7 +5,7 @@ Game This - Community by David Palacios (Hevedy) <https://github.com/Hevedy>
 <https://github.com/Hevedy/GameThis-Community>
 
 The MIT License (MIT)
-Copyright (C) 2018-2019 David Palacios (Hevedy) <https://github.com/Hevedy>
+Copyright (c) 2018-2020 David Palacios (Hevedy) <https://github.com/Hevedy>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -27,27 +27,45 @@ SOFTWARE.
 
 /*
 ================================================
-GameThisPrivatePCH.h
+GameThis.h
 ================================================
 */
 
 
-#include "IGameThis.h"
+#pragma once
 
-#include "Runtime/Launch/Resources/Version.h"
-
-#if ENGINE_MINOR_VERSION >= 15
 #include "CoreMinimal.h"
-#include "EngineDefines.h"
-#include "Engine/Engine.h"
-#include "UObject/Object.h"
-#include "UObject/ScriptMacros.h"
-#else
-#include "CoreUObject.h"
-#include "Engine.h"
-#endif
+#include "Modules/ModuleInterface.h"
+#include "Modules/ModuleManager.h"
 
-#include "SharedPointer.h"
 
-// You should place include statements to your module's private header files here.  You only need to
-// add includes for headers that are used in most of your module's source files though.
+/**
+ * The public interface to this module.  In most cases, this interface is only public to sibling modules
+ * within this plugin.
+ */
+class IGameThis : public IModuleInterface
+{
+
+public:
+
+	/**
+	 * Singleton-like access to this module's interface.  This is just for convenience!
+	 * Beware of calling this during the shutdown phase, though.  Your module might have been unloaded already.
+	 *
+	 * @return Returns singleton instance, loading the module on demand if needed
+	 */
+	static inline IGameThis& Get()
+	{
+		return FModuleManager::LoadModuleChecked<IGameThis>( "GameThis" );
+	}
+
+	/**
+	 * Checks to see if this module is loaded and ready.  It is only valid to call Get() if IsAvailable() returns true.
+	 *
+	 * @return True if the module is loaded and ready to use
+	 */
+	static inline bool IsAvailable()
+	{
+		return FModuleManager::Get().IsModuleLoaded( "GameThis" );
+	}
+};

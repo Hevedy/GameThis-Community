@@ -27,29 +27,49 @@ SOFTWARE.
 
 /*
 ================================================
-GameThis.cpp
+GameThisSocket.h
 ================================================
 */
 
 
-#include "GameThis.h"
+#pragma once
 
-class FGameThis : public IGameThis {
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+#include "CoreMinimal.h"
+#include "Engine.h"
+#include "Engine/Engine.h"
+#include "Networking.h"
+#include "GenericPlatform/GenericPlatformProcess.h"
+//#include "FInteractiveProcess.h"
+#include "Runtime/Core/Public/Misc/Paths.h"
+#include "GameThisSocket.generated.h"
+
+UCLASS()
+class GAMETHIS_API UGameThisSocket : public UBlueprintFunctionLibrary {
+	GENERATED_BODY()
+
+	UGameThisSocket( const FObjectInitializer& ObjectInitializer );
+
+
+protected:
+
+public:
+
+	void Laaaaaauuuunch();
+
+	FSocket* ListenerSocket;
+	FSocket* ConnectionSocket;
+	FIPv4Endpoint RemoteAddressForConnection;
+
+	bool StartTCPReceiver( const FString& _YourChosenSocketName, const FString& _TheIP, const int32 _ThePort );
+
+	FSocket* CreateTCPConnectionListener( const FString& _YourChosenSocketName, const FString& _TheIP, const int32 _ThePort, const int32 _ReceiveBufferSize = 2*1024*1024 );
+
+
+	void TCPConnectionListener(); 	//can thread this eventually
+	void TCPSocketListener();		//can thread this eventually
+
+	bool FormatIP4ToNumber(const FString& _TheIP, uint8 (&_Out)[4]);
+
+	FString StringFromBinaryArray(TArray<uint8>& _BinaryArray);
+	
 };
-
-IMPLEMENT_MODULE( FGameThis, GameThis )
-
-
-
-void FGameThis::StartupModule() {
-	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
-}
-
-
-void FGameThis::ShutdownModule() {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-}

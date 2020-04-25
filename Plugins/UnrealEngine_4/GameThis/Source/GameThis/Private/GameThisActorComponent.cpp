@@ -27,29 +27,54 @@ SOFTWARE.
 
 /*
 ================================================
-GameThis.cpp
+GameThisActorComponent.cpp
 ================================================
 */
 
-
-#include "GameThis.h"
-
-class FGameThis : public IGameThis {
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
-};
-
-IMPLEMENT_MODULE( FGameThis, GameThis )
+#include "GameThisActorComponent.h"
 
 
-
-void FGameThis::StartupModule() {
-	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
+// Sets default values for this component's properties
+UGameThisActorComponent::UGameThisActorComponent() {
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = true;
+	GameThisCore = NewObject<UGameThisCore>();
+	bIsConnected = false;
+	// ...
 }
 
 
-void FGameThis::ShutdownModule() {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
+// Called when the game starts
+void UGameThisActorComponent::BeginPlay() {
+	Super::BeginPlay();
+
+
+}
+
+
+// Called every frame
+void UGameThisActorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
+
+void UGameThisActorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+
+	Super::EndPlay( EndPlayReason );
+
+}
+
+void UGameThisActorComponent::OnComponentDestroyed(const bool bDestroyingHierarchy) {
+	if (bDestroyingHierarchy ) {
+
+	}
+
+	Super::OnComponentDestroyed( bDestroyingHierarchy );
+}
+void UGameThisActorComponent::ConnectToNexus() {
+
+}
+
+void UGameThisActorComponent::DisconnectFromNexus() {
+
 }

@@ -5,7 +5,7 @@ Game This - Community by David Palacios (Hevedy) <https://github.com/Hevedy>
 <https://github.com/Hevedy/GameThis-Community>
 
 The MIT License (MIT)
-Copyright (C) 2018-2019 David Palacios (Hevedy) <https://github.com/Hevedy>
+Copyright (c) 2018-2020 David Palacios (Hevedy) <https://github.com/Hevedy>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -27,45 +27,28 @@ SOFTWARE.
 
 /*
 ================================================
-IGameThis.h
+GameThisPipe.cpp
 ================================================
 */
 
 
-#pragma once
+#include "GameThisPipe.h"
+#include "GameThisIO.h"
 
-#include "CoreMinimal.h"
-#include "ModuleInterface.h"
-#include "ModuleManager.h"
+#include "Runtime/Core/Public/GenericPlatform/GenericPlatformDriver.h"
+#include "Runtime/Core/Public/Misc/SecureHash.h"
+#include "Runtime/Core/Public/Logging/MessageLog.h"
+
+#if WITH_EDITOR
+#include "Runtime/Core/Public/Internationalization/Regex.h"
+#endif
 
 
-/**
- * The public interface to this module.  In most cases, this interface is only public to sibling modules
- * within this plugin.
- */
-class IGameThis : public IModuleInterface
-{
+UGameThisPipe::UGameThisPipe( const class FObjectInitializer& ObjectInitializer ) {
 
-public:
+}
 
-	/**
-	 * Singleton-like access to this module's interface.  This is just for convenience!
-	 * Beware of calling this during the shutdown phase, though.  Your module might have been unloaded already.
-	 *
-	 * @return Returns singleton instance, loading the module on demand if needed
-	 */
-	static inline IGameThis& Get()
-	{
-		return FModuleManager::LoadModuleChecked<IGameThis>( "GameThis" );
-	}
+bool UGameThisPipe::CreatePipe() {
 
-	/**
-	 * Checks to see if this module is loaded and ready.  It is only valid to call Get() if IsAvailable() returns true.
-	 *
-	 * @return True if the module is loaded and ready to use
-	 */
-	static inline bool IsAvailable()
-	{
-		return FModuleManager::Get().IsModuleLoaded( "GameThis" );
-	}
-};
+	return false;
+}

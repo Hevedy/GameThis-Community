@@ -27,29 +27,58 @@ SOFTWARE.
 
 /*
 ================================================
-GameThis.cpp
+GameThisActorComponent.h
 ================================================
 */
 
+#pragma once
 
-#include "GameThis.h"
+#include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
+//#include "Runtime/Engine/Classes/Engine/Engine.h"
+#include "GameThisStructs.h"
+#include "GameThisCore.h"
+#include "GameThisActorComponent.generated.h"
 
-class FGameThis : public IGameThis {
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class GAMETHIS_API UGameThisActorComponent : public UActorComponent
+{
+	GENERATED_BODY()
+
+public:	
+	// Sets default values for this component's properties
+	UGameThisActorComponent();
+
+	UPROPERTY(BlueprintReadOnly, Category = "Game This")
+		bool bIsConnected;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game This")
+		bool bUseFile;
+
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+	UGameThisCore* GameThisCore;
+
+public:	
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	virtual void OnComponentDestroyed(const bool bDestroyingHierarchy) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Game This")
+		void ConnectToNexus();
+
+	UFUNCTION(BlueprintCallable, Category = "Game This")
+		void DisconnectFromNexus();
+
+
+private:
+
+	uint32* NexusID;
 };
-
-IMPLEMENT_MODULE( FGameThis, GameThis )
-
-
-
-void FGameThis::StartupModule() {
-	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
-}
-
-
-void FGameThis::ShutdownModule() {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-}

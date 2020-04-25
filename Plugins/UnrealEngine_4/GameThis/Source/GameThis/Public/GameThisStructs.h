@@ -27,29 +27,51 @@ SOFTWARE.
 
 /*
 ================================================
-GameThis.cpp
+GameThisStructs.h
 ================================================
 */
 
+#pragma once
 
-#include "GameThis.h"
+#include "CoreMinimal.h"
+#include "GameThisStructs.generated.h"
 
-class FGameThis : public IGameThis {
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+UENUM(BlueprintType)
+enum class EGameThisProcessType : uint8 {
+	eGT_DEFAULT	UMETA( DisplayName = "Default" ),
+	eGT_TUNNEL	UMETA( DisplayName = "Tunnel" ),
+	eGT_PIPE	UMETA( DisplayName = "Pipes" ),
+	eGT_SOCKET	UMETA( DisplayName = "Sockets" )
 };
 
-IMPLEMENT_MODULE( FGameThis, GameThis )
+UENUM(BlueprintType)
+enum class EGameThisAccountType : uint8 {
+
+	eDefault	UMETA( DisplayName = "Default" ),
+	eVIP		UMETA( DisplayName = "VIP" ),
+	eBot		UMETA( DisplayName = "Bot" ),
+	eMod		UMETA( DisplayName = "Mod" ),
+	eAdmin		UMETA( DisplayName = "Admin" )
+};
 
 
+// Input Time/Channel/User/Message
+USTRUCT(BlueprintType)
+struct GAMETHIS_API FGameThisChatMessageData {
+	GENERATED_BODY()
 
-void FGameThis::StartupModule() {
-	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
-}
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Game This" )
+		FString Username;
 
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Game This" )
+		FString Channel;
 
-void FGameThis::ShutdownModule() {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-}
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Game This" )
+		FString Message;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Game This" )
+		FString TimeStamp;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Game This" )
+		EGameThisAccountType AccountType;
+};
