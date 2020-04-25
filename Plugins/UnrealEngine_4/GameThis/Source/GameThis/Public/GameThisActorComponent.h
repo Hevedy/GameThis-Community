@@ -40,6 +40,11 @@ GameThisActorComponent.h
 #include "GameThisCore.h"
 #include "GameThisActorComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusConnectionChanged, bool, _IsConnected );
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusConnectionStatusChanged, bool, _IsReady );
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusChatMessageReceived, FGameThisChatMessageData, _Data );
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GAMETHIS_API UGameThisActorComponent : public UActorComponent
@@ -61,7 +66,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UGameThisCore* GameThisCore;
+	GameThisCore NexusCore;
 
 public:	
 	// Called every frame
@@ -70,6 +75,25 @@ public:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	virtual void OnComponentDestroyed(const bool bDestroyingHierarchy) override;
+
+	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
+		FNexusConnectionChanged OnConnectionChanged;
+
+	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
+		FNexusConnectionStatusChanged OnConnectionStatusChanged;
+
+	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
+		FNexusChatMessageReceived OnChatMessageReceived;
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
+		bool SetNexusData( const TArray<FString>& _Admins, const TArray<FString>& _Moderators, const TArray<FString>& _VIPs, const TArray<FString>& _Bots );
+
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
+		bool SetDiscordData( const FString& _ServerName, const FString& _ChannelName, const FString& _AdminName, const FString& _BotName, const FString& _Password );
+
+	// Create the nexus and launch it
+	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
+		bool CreateNexus( const EGameThisProcessType _Type );
 
 	UFUNCTION(BlueprintCallable, Category = "Game This")
 		void ConnectToNexus();

@@ -53,20 +53,27 @@ GameThisCore.cpp
 
 static FProcHandle Nexus;
 
-UGameThisCore::UGameThisCore( const class FObjectInitializer& ObjectInitializer ) {
-	NexusID = 0;
+GameThisCore::GameThisCore() {
+	//NexusID = 0;
 }
 
+GameThisCore::~GameThisCore() {
+	Shutdown();
+}
 
-void UGameThisCore::BeginDestroy() {
+void GameThisCore::Shutdown() {
+	if ( !Active ) { return; }
+	Active = false;
+	//NexusLastReady = false;
+	if ( InputListeningThread != NULL && InputListeningThread->joinable() ) {
+		InputListeningThread->join();
+	}
 	if ( Nexus.IsValid() ) {
 		FGenericPlatformProcess::CloseProc( Nexus );
 	}
-	Super::BeginDestroy();
-
 }
 
-bool UGameThisCore::SetNexusData( const TArray<FString>& _Admins, const TArray<FString>& _Moderators, const TArray<FString>& _VIPs, const TArray<FString>& _Bots ) {
+bool GameThisCore::SetNexusData( const TArray<FString>& _Admins, const TArray<FString>& _Moderators, const TArray<FString>& _VIPs, const TArray<FString>& _Bots ) {
 	if ( NexusConnected || NexusReady ) {
 		return false;
 	}
@@ -80,8 +87,7 @@ bool UGameThisCore::SetNexusData( const TArray<FString>& _Admins, const TArray<F
 
 }
 
-
-bool UGameThisCore::SetDiscordData( const FString& _ServerName, const FString& _ChannelName, const FString& _AdminName, const FString& _BotName, const FString& _Password ) {
+bool GameThisCore::SetDiscordData( const FString& _ServerName, const FString& _ChannelName, const FString& _AdminName, const FString& _BotName, const FString& _Password ) {
 	if ( NexusConnected || NexusReady ) {
 		return false;
 	}
@@ -100,7 +106,8 @@ bool UGameThisCore::SetDiscordData( const FString& _ServerName, const FString& _
 	return true;
 }
 
-bool UGameThisCore::CreateNexus( const EGameThisProcessType _Type ) {
+bool GameThisCore::CreateNexus( const EGameThisProcessType _Type ) {
+	NexusID = 0;
 	FString params = "-UE4 ";
 	switch ( _Type ) {
 		case EGameThisProcessType::eGT_DEFAULT:
@@ -143,62 +150,71 @@ bool UGameThisCore::CreateNexus( const EGameThisProcessType _Type ) {
 		NexusConnected = true;
 		NexusReady = true;
 		UE_LOG( LogTemp, Log, TEXT( "Game This: Process Launched." ) );
+		Active = true;
+		InputListeningThread = std::unique_ptr<std::thread>( new std::thread( &GameThisCore::Loop, this ) );
+		InputListeningThread->detach();
+		return true;
 	}
-	return false;
 }
 
-bool UGameThisCore::IsNexusRunning() {
+bool GameThisCore::IsNexusRunning() {
 	return FGenericPlatformProcess::IsProcRunning( Nexus );
 }
 
-bool UGameThisCore::IsGameThisConnected() {
+bool GameThisCore::IsGameThisConnected() {
 	return NexusConnected;
 }
 
-bool UGameThisCore::IsGameThisReady() {
+bool GameThisCore::IsGameThisReady() {
 	return NexusReady;
 }
 
-void UGameThisCore::Loop() {
-	if ( IsNexusRunning() ) {
-		NexusConnected = true;
-	} else {
-		NexusConnected = false;
-		return;
-	}
-	switch ( ProcessType ) {
-		case EGameThisProcessType::eGT_DEFAULT:
-			break;
-		case EGameThisProcessType::eGT_TUNNEL:
-			GetTunnelMessages();
-			break;
-		case EGameThisProcessType::eGT_PIPE:
-			GetPipeMessages();
-			break;
-		case EGameThisProcessType::eGT_SOCKET:
-			GetSocketMessages();
-			break;
-		default:
-			break;
-	}
+void GameThisCore::Loop() {
 
-	if ( NexusConnected != NexusLastConnected ) {
-		// Status Change
-		OnConnectionChanged.Broadcast( NexusConnected );
+	while ( Active ) {
+		if ( IsNexusRunning() ) {
+			NexusConnected = true;
+		} else {
+			NexusConnected = false;
+			return;
+		}
+		switch ( ProcessType ) {
+			case EGameThisProcessType::eGT_DEFAULT:
+				GetTunnelMessages();
+				break;
+			case EGameThisProcessType::eGT_TUNNEL:
+				GetTunnelMessages();
+				break;
+			case EGameThisProcessType::eGT_PIPE:
+				GetPipeMessages();
+				break;
+			case EGameThisProcessType::eGT_SOCKET:
+				GetSocketMessages();
+				break;
+			default:
+				break;
+		}
+
+		if ( NexusConnected != NexusLastConnected ) {
+			// Status Change
+			//OnConnectionChanged.Broadcast( NexusConnected );
+			ConnectionChanged = true;
+		}
+		if ( NexusReady != NexusLastReady ) {
+			// Status Change
+			//OnConnectionStatusChanged.Broadcast( (NexusReady &&  NexusConnected) );
+			ConnectionStateChanged = true;
+		}
+		NexusLastConnected = NexusConnected;
+		NexusLastReady = NexusReady;
 	}
-	if ( NexusReady != NexusLastReady ) {
-		// Status Change
-		OnConnectionStatusChanged.Broadcast( (NexusReady &&  NexusConnected) );
-	}
-	NexusLastConnected = NexusConnected;
-	NexusLastReady = NexusReady;
 }
 
-bool UGameThisCore::IsTunnelValid() {
+bool GameThisCore::IsTunnelValid() {
 	return FPaths::FileExists( UGameThisIO::GameThisTunnelFile() );
 }
 
-void UGameThisCore::GetTunnelMessages() {
+void GameThisCore::GetTunnelMessages() {
 	if ( !IsTunnelValid() ) {
 		NexusReady = false;
 		return;
@@ -245,31 +261,33 @@ void UGameThisCore::GetTunnelMessages() {
 				msg.AccountType = EGameThisAccountType::eDefault;
 			}
 			ChatMessages.Add( msg );
-			OnChatMessageReceived.Broadcast( msg );
+			//OnChatMessageReceived.Broadcast( msg );
+			ChatMessage = msg;
+			ChatMessageWaiting = true;
 		} else {
 			continue;
 		}
 	}
 }
 
-bool UGameThisCore::ArePipesValid() {
+bool GameThisCore::ArePipesValid() {
 	// TODO IMPLEMENTS PIPES
 	return false;
 }
 
-void UGameThisCore::GetPipeMessages() {
+void GameThisCore::GetPipeMessages() {
 	if ( !ArePipesValid() ) {
 		NexusReady = false;
 		return;
 	}
 }
 
-bool UGameThisCore::AreSocketsValid() {
+bool GameThisCore::AreSocketsValid() {
 	// TODO IMPLEMENT SOCKETS
 	return false;
 }
 
-void UGameThisCore::GetSocketMessages() {
+void GameThisCore::GetSocketMessages() {
 	if ( !AreSocketsValid() ) {
 		NexusReady = false;
 		return;

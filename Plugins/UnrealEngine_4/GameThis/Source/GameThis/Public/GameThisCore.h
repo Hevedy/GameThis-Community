@@ -38,104 +38,81 @@ GameThisCore.h
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameThisIO.h"
 #include "GameThisStructs.h"
-#include "GameThisCore.generated.h"
+#include <thread>
 
-
-// Event triggered when receiveign a message from the Twitch API
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusChatMessageReceived, FGameThisChatMessageData, _Data );
-
-// Event triggered when the connection to twitch chat changes
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusConnectionChanged, bool, _IsConnected );
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FNexusConnectionStatusChanged, bool, _IsReady );
-
-
-UCLASS()
-class GAMETHIS_API UGameThisCore : public UObject {
-	GENERATED_BODY()
-
-	UGameThisCore( const FObjectInitializer& ObjectInitializer );
-
+class GAMETHIS_API GameThisCore {
+public:
+	GameThisCore();
+	~GameThisCore();
 
 public:
-
-	virtual void BeginDestroy() override;
 
 	//
 	// CORE
 	//
 
 	// Setup the nexus parameters
-	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
-		bool SetNexusData( const TArray<FString>& _Admins, const TArray<FString>& _Moderators, const TArray<FString>& _VIPs, const TArray<FString>& _Bots );
+	bool SetNexusData( const TArray<FString>& _Admins, const TArray<FString>& _Moderators, const TArray<FString>& _VIPs, const TArray<FString>& _Bots );
 
-	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
-		bool SetDiscordData( const FString& _ServerName, const FString& _ChannelName, const FString& _AdminName, const FString& _BotName, const FString& _Password );
+	bool SetDiscordData( const FString& _ServerName, const FString& _ChannelName, const FString& _AdminName, const FString& _BotName, const FString& _Password );
 
 	// Create the nexus and launch it
-	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
-		bool CreateNexus( const EGameThisProcessType _Type );
+	bool CreateNexus( const EGameThisProcessType _Type );
 
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool IsNexusRunning();
+	bool IsNexusRunning();
 
 	// Returns if Game This is connected 
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool IsGameThisConnected();
+	bool IsGameThisConnected();
 		
 	// Returns if Game This is ready 
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool IsGameThisReady();
+	bool IsGameThisReady();
 
-	UFUNCTION( BlueprintCallable, Category = "GameThis|Core" )
-		void Loop();
+	void Loop();
 
-	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
-		FNexusConnectionChanged OnConnectionChanged;
-
-	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
-		FNexusConnectionStatusChanged OnConnectionStatusChanged;
-
-	UPROPERTY( BlueprintAssignable, Category = "GameThis|Integrator" )
-		FNexusChatMessageReceived OnChatMessageReceived;
+	void Shutdown();
 
 	//
 	// TUNNEL
 	//
 	
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool IsTunnelValid();
+	bool IsTunnelValid();
 
-	UFUNCTION( BlueprintCallable, Category = "GameThis" )
-		void GetTunnelMessages();
+	void GetTunnelMessages();
 
 	//
 	// PIPES
 	//
 
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool ArePipesValid();
+	bool ArePipesValid();
 
-	UFUNCTION( BlueprintCallable, Category = "GameThis" )
-		void GetPipeMessages();
+	void GetPipeMessages();
 
 	//
 	// SOCKETS
 	//
 
-	UFUNCTION( BlueprintPure, Category = "GameThis|Status" )
-		bool AreSocketsValid();
+	bool AreSocketsValid();
 
-	UFUNCTION( BlueprintCallable, Category = "GameThis" )
-		void GetSocketMessages();
+	void GetSocketMessages();
+
+
+
+public:
+	bool ConnectionChanged = false;
+	bool ConnectionStateChanged = false;
+
+	bool NexusConnected = false;
+	bool NexusReady = false;
+
+	bool ChatMessageWaiting = false;
+	FGameThisChatMessageData ChatMessage;
 
 private:
 	uint32* NexusID;
 
-	bool NexusConnected = false;
-	bool NexusReady = false;
 	bool NexusLastConnected = false;
 	bool NexusLastReady = false;
+	bool Active = false;
 
 	FString KeyID = "ABC";
 	EGameThisProcessType ProcessType = EGameThisProcessType::eGT_DEFAULT;
@@ -162,4 +139,5 @@ private:
 	int32 TunnelMessagesLimit = 9999;
 
 
+	std::unique_ptr<std::thread> InputListeningThread;
 };

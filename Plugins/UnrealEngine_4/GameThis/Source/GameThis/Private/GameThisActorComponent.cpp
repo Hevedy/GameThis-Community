@@ -39,7 +39,8 @@ UGameThisActorComponent::UGameThisActorComponent() {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	GameThisCore = NewObject<UGameThisCore>();
+	//GameThisCore = NewObject<UGameThisCore>();
+	//NexusCore = GameThisCore();
 	bIsConnected = false;
 	// ...
 }
@@ -52,13 +53,42 @@ void UGameThisActorComponent::BeginPlay() {
 
 }
 
+bool UGameThisActorComponent::SetNexusData( const TArray<FString>& _Admins, const TArray<FString>& _Moderators, const TArray<FString>& _VIPs, const TArray<FString>& _Bots ) {
+	return NexusCore.SetNexusData( _Admins, _Moderators, _VIPs, _Bots );
+}
+
+bool UGameThisActorComponent::SetDiscordData( const FString& _ServerName, const FString& _ChannelName, const FString& _AdminName, const FString& _BotName, const FString& _Password ) {
+	return NexusCore.SetDiscordData( _ServerName, _ChannelName, _AdminName, _BotName, _Password );
+}
+
+bool UGameThisActorComponent::CreateNexus( const EGameThisProcessType _Type ) {
+	return NexusCore.CreateNexus( _Type );
+}
+
 
 // Called every frame
 void UGameThisActorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+
+	if ( NexusCore.ConnectionChanged ) {
+		OnConnectionChanged.Broadcast( NexusCore.NexusConnected );
+		NexusCore.ConnectionChanged = false;
+	}
+
+	if ( NexusCore.ConnectionStateChanged ) {
+		OnConnectionStatusChanged.Broadcast( NexusCore.NexusReady );
+		NexusCore.ConnectionStateChanged = false;
+	}
+
+	if ( NexusCore.ChatMessageWaiting ) {
+		OnChatMessageReceived.Broadcast( NexusCore.ChatMessage );
+		NexusCore.ChatMessageWaiting = false;
+	}
 }
 
 void UGameThisActorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	NexusCore.Shutdown();
 
 	Super::EndPlay( EndPlayReason );
 
@@ -66,7 +96,7 @@ void UGameThisActorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) 
 
 void UGameThisActorComponent::OnComponentDestroyed(const bool bDestroyingHierarchy) {
 	if (bDestroyingHierarchy ) {
-
+		NexusCore.Shutdown();
 	}
 
 	Super::OnComponentDestroyed( bDestroyingHierarchy );
